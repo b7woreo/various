@@ -1,0 +1,67 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+def pkgName = "various"
+def siteUrl = "https://github.com/chen-ren-jie/various"
+def gitUrl = "https://github.com/chen-ren-jie/various.git"
+
+group = "com.chrnie"
+version = rootProject.ext.versionName
+
+install {
+  repositories.mavenInstaller {
+    pom.project {
+      packaging 'aar'
+      name pkgName
+      url siteUrl
+
+      licenses {
+        license {
+          name 'MIT'
+          url 'http://www.opensource.org/licenses/mit-license.php'
+        }
+      }
+
+      developers {
+        developer {
+          id 'chrnie'
+          name 'chrnie'
+          email 'chrnie@qq.com'
+        }
+      }
+
+      scm {
+        connection gitUrl
+        developerConnection gitUrl
+        url siteUrl
+      }
+    }
+  }
+}
+
+task sourcesJar(type: Jar) {
+  from android.sourceSets.main.java.sourceFiles
+  classifier = 'sources'
+}
+
+artifacts {
+  archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+  user = properties.getProperty("bintray.user")
+  key = properties.getProperty("bintray.apikey")
+  configurations = ['archives']
+
+  pkg {
+    repo = "maven"
+    name = pkgName
+    websiteUrl = siteUrl
+    vcsUrl = gitUrl
+    licenses = ["MIT"]
+    publish = true
+  }
+}
