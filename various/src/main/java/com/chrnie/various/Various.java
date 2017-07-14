@@ -28,10 +28,11 @@ public final class Various {
     void onBind(V holder, T item);
   }
 
-  public static class Builder {
+  public interface OnBindWithPayloadListener<V extends ViewHolder, T> {
+    void onBindWithPayload(V holder, T item, List<Object> payloads);
+  }
 
-    private static final OnBindListener EMPTY_BIND_LISTENER = (holder, item) -> {
-    };
+  public static class Builder {
 
     final List<?> itemList;
     final List<Bundle> bundleList = new ArrayList<>(2);
@@ -41,14 +42,21 @@ public final class Various {
     }
 
     public <V extends ViewHolder, T> Builder register(Class<T> itemType,
-        OnCreateListener<V> onCreateListener, OnBindListener<V, T> onBindListener) {
-      bundleList.add(new Bundle(itemType, onCreateListener, onBindListener));
-      return this;
+        OnCreateListener<V> onCreateListener) {
+      return register(itemType, onCreateListener, null);
     }
 
     public <V extends ViewHolder, T> Builder register(Class<T> itemType,
-        OnCreateListener<V> onCreateListener) {
-      return register(itemType, onCreateListener, EMPTY_BIND_LISTENER);
+        OnCreateListener<V> onCreateListener, OnBindListener<V, T> onBindListener) {
+      return register(itemType, onCreateListener, onBindListener, null);
+    }
+
+    public <V extends ViewHolder, T> Builder register(Class<T> itemType,
+        OnCreateListener<V> onCreateListener, OnBindListener<V, T> onBindListener,
+        OnBindWithPayloadListener<V, T> onBindWithPayloadListener) {
+      bundleList.add(
+          new Bundle(itemType, onCreateListener, onBindListener, onBindWithPayloadListener));
+      return this;
     }
 
     public RecyclerView.Adapter<ViewHolder> build() {
@@ -61,11 +69,14 @@ public final class Various {
     final Class itemType;
     final OnCreateListener onCreateListener;
     final OnBindListener onBindListener;
+    final OnBindWithPayloadListener onBindWithPayloadListener;
 
-    Bundle(Class itemType, OnCreateListener onCreateListener, OnBindListener onBindListener) {
+    Bundle(Class itemType, OnCreateListener onCreateListener, OnBindListener onBindListener,
+        OnBindWithPayloadListener onBindWithPayloadListener) {
       this.itemType = itemType;
       this.onCreateListener = onCreateListener;
       this.onBindListener = onBindListener;
+      this.onBindWithPayloadListener = onBindWithPayloadListener;
     }
   }
 
@@ -96,10 +107,24 @@ public final class Various {
       return bundle.onCreateListener.onCreate(inflater, parent);
     }
 
-    @Override public void onBindViewHolder(ViewHolder holder, int position) {
-      Object item = itemList.get(position);
+    @Override public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
       Bundle bundle = bundleList.get(holder.getItemViewType());
-      bundle.onBindListener.onBind(holder, item);
+
+      if (!payloads.isEmpty() && bundle.onBindWithPayloadListener != null) {
+        Object item = itemList.get(position);
+        bundle.onBindWithPayloadListener.onBindWithPayload(holder, item, payloads);
+      } else if (bundle.onBindListener != null) {
+        super.onBindViewHolder(holder, position, payloads);
+      }
+    }
+
+    @Override public void onBindViewHolder(ViewHolder holder, int position) {
+      Bundle bundle = bundleList.get(holder.getItemViewType());
+
+      if (bundle.onBindListener != null) {
+        Object item = itemList.get(position);
+        bundle.onBindListener.onBind(holder, item);
+      }
     }
 
     @Override public int getItemCount() {
