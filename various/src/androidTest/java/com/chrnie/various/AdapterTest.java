@@ -26,9 +26,11 @@ import static org.junit.Assert.assertEquals;
     adapter = Various.of(itemList)
         .register(Integer.class, IntViewHolder::create)
         .register(String.class, StringViewHolder::create, StringViewHolder::bind)
+        .register(Double.class, DoubleViewHolder::create, DoubleViewHolder::bind,
+            DoubleViewHolder::bindWithPayload)
         .build();
 
-    itemList.addAll(Arrays.asList(1, "Hello", 2));
+    itemList.addAll(Arrays.asList(1, "Hello", 2.0));
   }
 
   @Test public void getItemCount() {
@@ -51,6 +53,25 @@ import static org.junit.Assert.assertEquals;
     int viewType = adapter.getItemViewType(1);
     ViewHolder viewHolder = adapter.createViewHolder(container, viewType);
     adapter.onBindViewHolder(viewHolder, 1);
+  }
+
+  @Test public void bindWithPayload() {
+    ViewGroup container = new RecyclerView(InstrumentationRegistry.getContext());
+    int viewType = adapter.getItemViewType(2);
+    ViewHolder viewHolder = adapter.createViewHolder(container, viewType);
+    try {
+      adapter.onBindViewHolder(viewHolder, 2);
+      throw new FailException();
+    } catch (Exception e) {
+      assertEquals(BindException.class, e.getClass());
+    }
+
+    try {
+      adapter.onBindViewHolder(viewHolder, 2, Arrays.asList(new Object()));
+      throw new FailException();
+    } catch (Exception e) {
+      assertEquals(BindWithPayloadException.class, e.getClass());
+    }
   }
 
   private static class IntViewHolder extends ViewHolder {
@@ -81,7 +102,35 @@ import static org.junit.Assert.assertEquals;
     }
   }
 
+  private static class DoubleViewHolder extends ViewHolder {
+
+    public static DoubleViewHolder create(LayoutInflater inflater, ViewGroup container) {
+      View itemView = new View(container.getContext());
+      return new DoubleViewHolder(itemView);
+    }
+
+    private DoubleViewHolder(View itemView) {
+      super(itemView);
+    }
+
+    public void bind(Double item) {
+      throw new BindException();
+    }
+
+    public void bindWithPayload(Double item, List<Object> payload) {
+      throw new BindWithPayloadException();
+    }
+  }
+
   public static class BindException extends RuntimeException {
+
+  }
+
+  public static class BindWithPayloadException extends RuntimeException {
+
+  }
+
+  public static class FailException extends RuntimeException {
 
   }
 }
