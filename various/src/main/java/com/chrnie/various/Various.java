@@ -15,7 +15,11 @@ public final class Various {
   }
 
   public static Builder of(List<?> itemList) {
-    return new Builder(itemList);
+    return Various.of(itemList, new DefaultItemPool());
+  }
+
+  public static Builder of(List<?> itemList, ItemPool itemPool) {
+    return new Builder(itemList, itemPool);
   }
 
   public interface OnCreateListener<V extends ViewHolder> {
@@ -35,10 +39,12 @@ public final class Various {
   public static class Builder {
 
     final List<?> itemList;
+    final ItemPool itemPool;
     final List<Bundle> bundleList = new ArrayList<>(2);
 
-    Builder(List<?> itemList) {
+    Builder(List<?> itemList, ItemPool itemPool) {
       this.itemList = itemList;
+      this.itemPool = itemPool;
     }
 
     public <V extends ViewHolder, T> Builder register(Class<T> itemType,
@@ -83,47 +89,43 @@ public final class Various {
   static class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     private final List<?> itemList;
-    private final List<Bundle> bundleList;
+    private final ItemPool itemPool;
 
     Adapter(Builder builder) {
       this.itemList = builder.itemList;
-      bundleList = new ArrayList<>(builder.bundleList);
+      itemPool = builder.itemPool;
+      itemPool.init(builder.bundleList);
     }
 
     @Override public int getItemViewType(int position) {
       Class<?> itemType = itemList.get(position).getClass();
-      for (int i = 0; i < bundleList.size(); i++) {
-        Bundle bundle = bundleList.get(i);
-        if (itemType.equals(bundle.itemType)) {
-          return i;
-        }
-      }
-      throw new IllegalArgumentException();
+      return itemPool.viewTypeOf(itemType);
     }
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-      Bundle bundle = bundleList.get(viewType);
-      return bundle.onCreateListener.onCreate(inflater, parent);
+      OnCreateListener listener = itemPool.onCreateOf(viewType);
+      return listener.onCreate(inflater, parent);
     }
 
     @Override public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
-      Bundle bundle = bundleList.get(holder.getItemViewType());
+      OnBindWithPayloadListener listener =
+          itemPool.onBindWithPayloadListenerOf(holder.getItemViewType());
 
-      if (!payloads.isEmpty() && bundle.onBindWithPayloadListener != null) {
+      if (!payloads.isEmpty() && listener != null) {
         Object item = itemList.get(position);
-        bundle.onBindWithPayloadListener.onBindWithPayload(holder, item, payloads);
-      } else if (bundle.onBindListener != null) {
+        listener.onBindWithPayload(holder, item, payloads);
+      } else {
         super.onBindViewHolder(holder, position, payloads);
       }
     }
 
     @Override public void onBindViewHolder(ViewHolder holder, int position) {
-      Bundle bundle = bundleList.get(holder.getItemViewType());
+      OnBindListener listener = itemPool.onBindListenerOf(holder.getItemViewType());
 
-      if (bundle.onBindListener != null) {
+      if (listener != null) {
         Object item = itemList.get(position);
-        bundle.onBindListener.onBind(holder, item);
+        listener.onBind(holder, item);
       }
     }
 
