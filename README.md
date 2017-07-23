@@ -78,7 +78,6 @@ public class MyLifecycleViewHolder extends Various.LifecycleViewHolder {
 ```
 
 ## 待办事项
-0. onBind支持payloads参数
 0. 优化Adapter.getItemViewType效率
 
 ## License
