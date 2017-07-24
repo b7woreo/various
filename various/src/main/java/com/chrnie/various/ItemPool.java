@@ -8,9 +8,5 @@ public interface ItemPool {
 
   int viewTypeOf(Class itemType);
 
-  Various.OnCreateListener onCreateOf(int viewType);
-
-  Various.OnBindListener onBindListenerOf(int viewType);
-
-  Various.OnBindWithPayloadListener onBindWithPayloadListenerOf(int viewType);
+  Various.Bundle bundleOf(int viewType);
 }

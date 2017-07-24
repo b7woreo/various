@@ -104,13 +104,13 @@ public final class Various {
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-      OnCreateListener listener = itemPool.onCreateOf(viewType);
+      OnCreateListener listener = itemPool.bundleOf(viewType).onCreateListener;
       return listener.onCreate(inflater, parent);
     }
 
     @Override public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
       OnBindWithPayloadListener listener =
-          itemPool.onBindWithPayloadListenerOf(holder.getItemViewType());
+          itemPool.bundleOf(holder.getItemViewType()).onBindWithPayloadListener;
 
       if (!payloads.isEmpty() && listener != null) {
         Object item = itemList.get(position);
@@ -121,7 +121,7 @@ public final class Various {
     }
 
     @Override public void onBindViewHolder(ViewHolder holder, int position) {
-      OnBindListener listener = itemPool.onBindListenerOf(holder.getItemViewType());
+      OnBindListener listener = itemPool.bundleOf(holder.getItemViewType()).onBindListener;
 
       if (listener != null) {
         Object item = itemList.get(position);

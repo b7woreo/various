@@ -21,15 +21,7 @@ public final class DefaultItemPool implements ItemPool {
     throw new IllegalArgumentException();
   }
 
-  @Override public Various.OnCreateListener onCreateOf(int viewType) {
-    return bundleList.get(viewType).onCreateListener;
-  }
-
-  @Override public Various.OnBindListener onBindListenerOf(int viewType) {
-    return bundleList.get(viewType).onBindListener;
-  }
-
-  @Override public Various.OnBindWithPayloadListener onBindWithPayloadListenerOf(int viewType) {
-    return bundleList.get(viewType).onBindWithPayloadListener;
+  @Override public Various.Bundle bundleOf(int viewType) {
+    return bundleList.get(viewType);
   }
 }
