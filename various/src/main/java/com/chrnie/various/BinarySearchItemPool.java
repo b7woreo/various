@@ -8,7 +8,7 @@ public final class BinarySearchItemPool implements ItemPool {
   private static final Comparator<Class> CLASS_COMPARATOR = (a, b) -> {
     String n1 = a.getName();
     String n2 = b.getName();
-    return n1.compareTo(n2);
+    return Integer.compare(n1.hashCode(), n2.hashCode());
   };
 
   private static final Comparator<Various.Bundle> BUNDLE_COMPARATOR = (a, b) -> {
@@ -33,7 +33,9 @@ public final class BinarySearchItemPool implements ItemPool {
       Class c = bundles[mid].itemType;
       int cmp = CLASS_COMPARATOR.compare(itemType, c);
       if (cmp == 0) {
-        for (int i = mid; i < bundles.length; i++) {
+        if (itemType.equals(c)) return mid;
+
+        for (int i = mid + 1; i < bundles.length; i++) {
           c = bundles[i].itemType;
           cmp = CLASS_COMPARATOR.compare(c, itemType);
           if (cmp != 0) break;
