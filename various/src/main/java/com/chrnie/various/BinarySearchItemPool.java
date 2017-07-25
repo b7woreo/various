@@ -5,10 +5,16 @@ import java.util.List;
 
 public final class BinarySearchItemPool implements ItemPool {
 
-  private static final Comparator<Various.Bundle> BUNDLE_COMPARATOR = (a, b) -> {
-    String n1 = a.itemType.getName();
-    String n2 = b.itemType.getName();
+  private static final Comparator<Class> CLASS_COMPARATOR = (a, b) -> {
+    String n1 = a.getName();
+    String n2 = b.getName();
     return n1.compareTo(n2);
+  };
+
+  private static final Comparator<Various.Bundle> BUNDLE_COMPARATOR = (a, b) -> {
+    Class t1 = a.itemType;
+    Class t2 = b.itemType;
+    return CLASS_COMPARATOR.compare(t1, t2);
   };
 
   private Various.Bundle[] bundles;
@@ -19,17 +25,30 @@ public final class BinarySearchItemPool implements ItemPool {
   }
 
   @Override public int viewTypeOf(Class itemType) {
-    String t = itemType.getName();
-
     int l = 0;
     int r = bundles.length - 1;
 
     while (r >= l) {
       int mid = (l + r) / 2;
       Class c = bundles[mid].itemType;
-      if (c.equals(itemType)) {
-        return mid;
-      } else if (t.compareTo(c.getName()) > 0) {
+      int cmp = CLASS_COMPARATOR.compare(itemType, c);
+      if (cmp == 0) {
+        for (int i = mid; i < bundles.length; i++) {
+          c = bundles[i].itemType;
+          cmp = CLASS_COMPARATOR.compare(c, itemType);
+          if (cmp != 0) break;
+          if (itemType.equals(c)) return i;
+        }
+
+        for (int i = mid - 1; i >= 0; i--) {
+          c = bundles[i].itemType;
+          cmp = CLASS_COMPARATOR.compare(c, itemType);
+          if (cmp != 0) break;
+          if (itemType.equals(c)) return i;
+        }
+
+        throw new IllegalArgumentException();
+      } else if (cmp > 0) {
         l = mid + 1;
       } else {
         r = mid - 1;
