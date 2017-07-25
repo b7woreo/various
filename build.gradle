@@ -5,8 +5,8 @@ buildscript {
   ext.buildToolsVersion = "25.0.3"
   ext.minSdkVersion = 9
   ext.targetSdkVersion = 25
-  ext.versionCode = 2
-  ext.versionName = "0.2.0"
+  ext.versionCode = 3
+  ext.versionName = "0.2.1"
 
   def supportVersion = "25.4.0"
 
