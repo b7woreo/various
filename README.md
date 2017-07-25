@@ -5,7 +5,7 @@
 ## 用法
 ### 1. 添加依赖
 ```
-compile 'com.chrnie:various:0.2.0'
+compile 'com.chrnie:various:0.2.1'
 ```
 
 ### 2. 编写数据类型和ViewHolder
@@ -45,6 +45,7 @@ Adapter adapter = Various.of(itemList)
 ```
 
 ## 进阶用法
+### 1. 带生命周期的ViewHolder
 有时你需要使用到ViewHolder的生命周期，Various为你提供了LifecycleViewHolder，你只需继承并重写相应的生命周期方法即可。
 ``` java
 public class MyLifecycleViewHolder extends Various.LifecycleViewHolder {
@@ -77,8 +78,11 @@ public class MyLifecycleViewHolder extends Various.LifecycleViewHolder {
 }
 ```
 
-## 待办事项
-0. 优化Adapter.getItemViewType效率
+### 2. 复杂类型列表性能问题
+进过测试，在一般情况下（一个列表有几十种类型Item）默认的算法不会存在性能瓶颈。在极端情况下（一个列表有成百上千种类型的Item）给出了一个基于二分查找的算法，可以提升性能（在类型数量巨大时才会有明显提升，正常不推荐使用）。
+``` java
+Various.of(itemList, new BinarySearchItemPool());
+```
 
 ## License
-MIT
+MIT License
