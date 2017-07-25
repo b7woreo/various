@@ -5,7 +5,7 @@
 ## 用法
 ### 1. 添加依赖
 ```
-compile 'com.chrnie:various:0.1.0'
+compile 'com.chrnie:various:0.2.0'
 ```
 
 ### 2. 编写数据类型和ViewHolder
