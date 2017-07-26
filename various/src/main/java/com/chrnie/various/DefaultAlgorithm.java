@@ -3,7 +3,7 @@ package com.chrnie.various;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class DefaultItemPool implements ItemPool {
+public final class DefaultAlgorithm extends Algorithm {
 
   private List<Various.Bundle> bundleList;
 

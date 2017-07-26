@@ -3,7 +3,7 @@ package com.chrnie.various;
 import java.util.Comparator;
 import java.util.List;
 
-public final class BinarySearchItemPool implements ItemPool {
+public final class BinarySearchAlgorithm extends Algorithm {
 
   private static final Comparator<Class> CLASS_COMPARATOR =
       (a, b) -> Integer.compare(System.identityHashCode(a), System.identityHashCode(b));
