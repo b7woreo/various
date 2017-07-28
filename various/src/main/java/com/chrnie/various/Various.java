@@ -98,13 +98,18 @@ public final class Various {
     }
 
     @Override public int getItemViewType(int position) {
-      Class<?> itemType = itemList.get(position).getClass();
+      Object item = itemList.get(position);
+      Class itemType = getItemType(item);
       return algorithm.viewTypeOf(itemType);
     }
 
+    private Class getItemType(Object item) {
+      return item.getClass();
+    }
+
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      OnCreateListener listener = algorithm.onCreateListenerOf(viewType);
       LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-      OnCreateListener listener = algorithm.bundleOf(viewType).onCreateListener;
       return listener.onCreate(inflater, parent);
     }
 
