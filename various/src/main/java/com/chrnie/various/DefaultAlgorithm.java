@@ -18,7 +18,7 @@ public final class DefaultAlgorithm extends Algorithm {
         return i;
       }
     }
-    throw new IllegalArgumentException();
+    throw new ItemNotFoundException(itemType);
   }
 
   @Override public Various.Bundle bundleOf(int viewType) {

@@ -1,82 +1,93 @@
 package com.chrnie.various;
 
-import java.util.Comparator;
 import java.util.List;
 
 public final class BinarySearchAlgorithm extends Algorithm {
 
-  private static final Comparator<Class> CLASS_COMPARATOR =
-      (a, b) -> Integer.compare(System.identityHashCode(a), System.identityHashCode(b));
-
-  private static final Comparator<Various.Bundle> BUNDLE_COMPARATOR =
-      (a, b) -> CLASS_COMPARATOR.compare(a.itemType, b.itemType);
-
+  private int[] hashes;
   private Various.Bundle[] bundles;
 
-  @Override public void init(List<Various.Bundle> bundleList) {
-    bundles = bundleList.toArray(new Various.Bundle[bundleList.size()]);
-    sort();
-  }
+  private static int binarySearch(int[] array, int value) {
+    int lo = 0;
+    int hi = array.length - 1;
 
-  @Override public int viewTypeOf(Class itemType) {
-    int index = indexOf(itemType);
-    if (itemType.equals(bundles[index].itemType)) return index;
+    while (lo <= hi) {
+      final int mid = (lo + hi) >>> 1;
+      final int midVal = array[mid];
 
-    for (int i = index + 1; i < bundles.length; i++) {
-      Class clz = bundles[i].itemType;
-      int cmp = CLASS_COMPARATOR.compare(clz, itemType);
-      if (cmp != 0) break;
-      if (itemType.equals(clz)) return i;
-    }
-
-    for (int i = index - 1; i >= 0; i--) {
-      Class clz = bundles[i].itemType;
-      int cmp = CLASS_COMPARATOR.compare(clz, itemType);
-      if (cmp != 0) break;
-      if (itemType.equals(clz)) return i;
-    }
-
-    throw new IllegalArgumentException();
-  }
-
-  @Override public Various.Bundle bundleOf(int viewType) {
-    return bundles[viewType];
-  }
-
-  private int indexOf(Class itemType) {
-    int l = 0;
-    int r = bundles.length - 1;
-
-    while (r >= l) {
-      int mid = (l + r) / 2;
-      Class c = bundles[mid].itemType;
-      int cmp = CLASS_COMPARATOR.compare(itemType, c);
-      if (cmp == 0) {
-        return mid;
-      } else if (cmp > 0) {
-        l = mid + 1;
+      if (midVal < value) {
+        lo = mid + 1;
+      } else if (midVal > value) {
+        hi = mid - 1;
       } else {
-        r = mid - 1;
+        return mid;
       }
     }
-
-    return -1;
+    return ~lo;
   }
 
-  private void sort() {
+  private static void sort(Various.Bundle[] bundles) {
     for (int i = 0; i < bundles.length - 1; i++) {
       for (int j = i + 1; j > 0; j--) {
         Various.Bundle a = bundles[j - 1];
         Various.Bundle b = bundles[j];
-        if (BUNDLE_COMPARATOR.compare(a, b) <= 0) break;
-        exchange(j - 1, j);
+        if (compareBundle(a, b) <= 0) break;
+        exchange(bundles, j - 1, j);
       }
     }
   }
 
-  private void exchange(int i, int j) {
+  private static int compareBundle(Various.Bundle a, Various.Bundle b) {
+    int hashA = System.identityHashCode(a.itemType);
+    int hashB = System.identityHashCode(b.itemType);
+    return Integer.compare(hashA, hashB);
+  }
+
+  private static void exchange(Various.Bundle[] bundles, int i, int j) {
     Various.Bundle tmp = bundles[i];
     bundles[i] = bundles[j];
     bundles[j] = tmp;
+  }
+
+  @Override public void init(List<Various.Bundle> bundleList) {
+    initBundles(bundleList);
+    initHashes();
+  }
+
+  private void initBundles(List<Various.Bundle> bundleList) {
+    bundles = bundleList.toArray(new Various.Bundle[bundleList.size()]);
+    sort(bundles);
+  }
+
+  private void initHashes() {
+    hashes = new int[bundles.length];
+    for (int i = 0; i < hashes.length; i++) {
+      hashes[i] = System.identityHashCode(bundles[i].itemType);
+    }
+  }
+
+  @Override public int viewTypeOf(Class itemType) {
+    int hash = System.identityHashCode(itemType);
+    int index = binarySearch(hashes, hash);
+
+    if (index < 0) {
+      throw new ItemNotFoundException(itemType);
+    }
+
+    if (itemType.equals(bundles[index].itemType)) return index;
+
+    for (int i = index + 1; i < bundles.length && hash == hashes[i]; i++) {
+      if (itemType.equals(bundles[index].itemType)) return i;
+    }
+
+    for (int i = index - 1; i >= 0 && hash == hashes[i]; i--) {
+      if (itemType.equals(bundles[index].itemType)) return i;
+    }
+
+    throw new ItemNotFoundException(itemType);
+  }
+
+  @Override public Various.Bundle bundleOf(int viewType) {
+    return bundles[viewType];
   }
 }
