@@ -3,11 +3,10 @@ package com.chrnie.various;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class DefaultAlgorithm extends Algorithm {
-
+final class DefaultAlgorithm extends Algorithm {
   private List<Various.Bundle> bundleList;
 
-  @Override public void init(List<Various.Bundle> bundleList) {
+  DefaultAlgorithm(List<Various.Bundle> bundleList) {
     this.bundleList = new ArrayList<>(bundleList);
   }
 

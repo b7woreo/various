@@ -15,11 +15,11 @@ public final class Various {
   }
 
   public static Builder of(List<?> itemList) {
-    return Various.of(itemList, new DefaultAlgorithm());
+    return Various.of(itemList, new DefaultAlgorithmFactory());
   }
 
-  public static Builder of(List<?> itemList, Algorithm algorithm) {
-    return new Builder(itemList, algorithm);
+  public static Builder of(List<?> itemList, Algorithm.Factory factory) {
+    return new Builder(itemList, factory);
   }
 
   public interface OnCreateListener<V extends ViewHolder> {
@@ -39,12 +39,12 @@ public final class Various {
   public static class Builder {
 
     final List<?> itemList;
-    final Algorithm algorithm;
+    final Algorithm.Factory factory;
     final List<Bundle> bundleList = new ArrayList<>(2);
 
-    Builder(List<?> itemList, Algorithm algorithm) {
+    Builder(List<?> itemList, Algorithm.Factory factory) {
       this.itemList = itemList;
-      this.algorithm = algorithm;
+      this.factory = factory;
     }
 
     public <V extends ViewHolder, T> Builder register(Class<T> itemType,
@@ -93,8 +93,7 @@ public final class Various {
 
     Adapter(Builder builder) {
       this.itemList = builder.itemList;
-      algorithm = builder.algorithm;
-      algorithm.init(builder.bundleList);
+      algorithm = builder.factory.create(builder.bundleList);
     }
 
     @Override public int getItemViewType(int position) {

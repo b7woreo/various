@@ -2,7 +2,7 @@ package com.chrnie.various;
 
 import java.util.List;
 
-public final class BinarySearchAlgorithm extends Algorithm {
+final class BinarySearchAlgorithm extends Algorithm {
 
   private int[] hashes;
   private Various.Bundle[] bundles;
@@ -49,17 +49,14 @@ public final class BinarySearchAlgorithm extends Algorithm {
     bundles[j] = tmp;
   }
 
-  @Override public void init(List<Various.Bundle> bundleList) {
-    initBundles(bundleList);
-    initHashes();
+  BinarySearchAlgorithm(List<Various.Bundle> bundleList) {
+    initBundlesAndCacheHashes(bundleList);
   }
 
-  private void initBundles(List<Various.Bundle> bundleList) {
+  private void initBundlesAndCacheHashes(List<Various.Bundle> bundleList) {
     bundles = bundleList.toArray(new Various.Bundle[bundleList.size()]);
     sort(bundles);
-  }
 
-  private void initHashes() {
     hashes = new int[bundles.length];
     for (int i = 0; i < hashes.length; i++) {
       hashes[i] = System.identityHashCode(bundles[i].itemType);

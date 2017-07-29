@@ -4,8 +4,6 @@ import java.util.List;
 
 public abstract class Algorithm {
 
-  abstract void init(List<Various.Bundle> bundleList);
-
   abstract int viewTypeOf(Class itemType);
 
   abstract Various.Bundle bundleOf(int viewType);
@@ -20,5 +18,9 @@ public abstract class Algorithm {
 
   final Various.OnBindWithPayloadListener onBindWithPayloadListenerOf(int viewType) {
     return bundleOf(viewType).onBindWithPayloadListener;
+  }
+
+  public static abstract class Factory {
+    abstract Algorithm create(List<Various.Bundle> bundleList);
   }
 }
