@@ -6,7 +6,7 @@ public abstract class Algorithm {
 
   abstract int viewTypeOf(Class itemType);
 
-  abstract Various.Bundle bundleOf(int viewType);
+  abstract Item bundleOf(int viewType);
 
   final Various.OnCreateListener onCreateListenerOf(int viewType) {
     return bundleOf(viewType).onCreateListener;
@@ -21,6 +21,6 @@ public abstract class Algorithm {
   }
 
   public static abstract class Factory {
-    abstract Algorithm create(List<Various.Bundle> bundleList);
+    abstract Algorithm create(List<Item> itemList);
   }
 }

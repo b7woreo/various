@@ -5,7 +5,7 @@ import java.util.List;
 final class BinarySearchAlgorithm extends Algorithm {
 
   private int[] hashes;
-  private Various.Bundle[] bundles;
+  private Item[] items;
 
   private static int binarySearch(int[] array, int value) {
     int lo = 0;
@@ -26,40 +26,40 @@ final class BinarySearchAlgorithm extends Algorithm {
     return ~lo;
   }
 
-  private static void sort(Various.Bundle[] bundles) {
+  private static void sort(Item[] bundles) {
     for (int i = 0; i < bundles.length - 1; i++) {
       for (int j = i + 1; j > 0; j--) {
-        Various.Bundle a = bundles[j - 1];
-        Various.Bundle b = bundles[j];
+        Item a = bundles[j - 1];
+        Item b = bundles[j];
         if (compareBundle(a, b) <= 0) break;
         exchange(bundles, j - 1, j);
       }
     }
   }
 
-  private static int compareBundle(Various.Bundle a, Various.Bundle b) {
+  private static int compareBundle(Item a, Item b) {
     int hashA = System.identityHashCode(a.itemType);
     int hashB = System.identityHashCode(b.itemType);
     return Integer.compare(hashA, hashB);
   }
 
-  private static void exchange(Various.Bundle[] bundles, int i, int j) {
-    Various.Bundle tmp = bundles[i];
+  private static void exchange(Item[] bundles, int i, int j) {
+    Item tmp = bundles[i];
     bundles[i] = bundles[j];
     bundles[j] = tmp;
   }
 
-  BinarySearchAlgorithm(List<Various.Bundle> bundleList) {
+  BinarySearchAlgorithm(List<Item> bundleList) {
     initBundlesAndCacheHashes(bundleList);
   }
 
-  private void initBundlesAndCacheHashes(List<Various.Bundle> bundleList) {
-    bundles = bundleList.toArray(new Various.Bundle[bundleList.size()]);
-    sort(bundles);
+  private void initBundlesAndCacheHashes(List<Item> bundleList) {
+    items = bundleList.toArray(new Item[bundleList.size()]);
+    sort(items);
 
-    hashes = new int[bundles.length];
+    hashes = new int[items.length];
     for (int i = 0; i < hashes.length; i++) {
-      hashes[i] = System.identityHashCode(bundles[i].itemType);
+      hashes[i] = System.identityHashCode(items[i].itemType);
     }
   }
 
@@ -71,20 +71,20 @@ final class BinarySearchAlgorithm extends Algorithm {
       throw new ItemNotFoundException(itemType);
     }
 
-    if (itemType.equals(bundles[index].itemType)) return index;
+    if (itemType.equals(items[index].itemType)) return index;
 
-    for (int i = index + 1; i < bundles.length && hash == hashes[i]; i++) {
-      if (itemType.equals(bundles[index].itemType)) return i;
+    for (int i = index + 1; i < items.length && hash == hashes[i]; i++) {
+      if (itemType.equals(items[index].itemType)) return i;
     }
 
     for (int i = index - 1; i >= 0 && hash == hashes[i]; i--) {
-      if (itemType.equals(bundles[index].itemType)) return i;
+      if (itemType.equals(items[index].itemType)) return i;
     }
 
     throw new ItemNotFoundException(itemType);
   }
 
-  @Override public Various.Bundle bundleOf(int viewType) {
-    return bundles[viewType];
+  @Override public Item bundleOf(int viewType) {
+    return items[viewType];
   }
 }

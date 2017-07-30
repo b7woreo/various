@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 final class DefaultAlgorithm extends Algorithm {
-  private List<Various.Bundle> bundleList;
+  private List<Item> itemList;
 
-  DefaultAlgorithm(List<Various.Bundle> bundleList) {
-    this.bundleList = new ArrayList<>(bundleList);
+  DefaultAlgorithm(List<Item> itemList) {
+    this.itemList = new ArrayList<>(itemList);
   }
 
   @Override public int viewTypeOf(Class itemType) {
-    for (int i = 0; i < bundleList.size(); i++) {
-      Various.Bundle bundle = bundleList.get(i);
+    for (int i = 0; i < itemList.size(); i++) {
+      Item bundle = itemList.get(i);
       if (itemType.equals(bundle.itemType)) {
         return i;
       }
@@ -20,7 +20,7 @@ final class DefaultAlgorithm extends Algorithm {
     throw new ItemNotFoundException(itemType);
   }
 
-  @Override public Various.Bundle bundleOf(int viewType) {
-    return bundleList.get(viewType);
+  @Override public Item bundleOf(int viewType) {
+    return itemList.get(viewType);
   }
 }

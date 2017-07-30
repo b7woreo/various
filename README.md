@@ -39,7 +39,7 @@ public class NewsViewHolder extends ViewHolder {
 ### 3. 创建Adapter
 注册Item的相关参数（数据类型，创建方法，数据绑定方法）。在使用了lambda表达式之后，你将看到创建一个Adapter是如此简洁。之后你只需关注itemList中的数据，Adapter帮你完成对应数据类型到ViewHolder的映射。
 ``` java
-Adapter adapter = Various.of(itemList)
+Adapter adapter = Various.of(dataList)
         .register(News.class, NewsViewHolder::create, NewsViewHolder::bind)
         .build();
 ```
@@ -81,7 +81,7 @@ public class MyLifecycleViewHolder extends Various.LifecycleViewHolder {
 ### 2. 复杂类型列表性能问题
 进过测试，在一般情况下（一个列表有几十种类型Item）默认的算法不会存在性能瓶颈。在极端情况下（一个列表有成百上千种类型的Item）给出了一个基于二分查找的算法，可以提升性能（在类型数量巨大时才会有明显提升，正常不推荐使用）。
 ``` java
-Various.of(itemList, new BinarySearchItemPool());
+Various.of(dataList, new BinarySearchItemPool());
 ```
 
 ## License

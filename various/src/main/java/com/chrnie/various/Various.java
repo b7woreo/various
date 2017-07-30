@@ -14,12 +14,12 @@ public final class Various {
     throw new IllegalStateException("none constructor");
   }
 
-  public static Builder of(List<?> itemList) {
-    return Various.of(itemList, new DefaultAlgorithmFactory());
+  public static Builder of(List<?> dataList) {
+    return Various.of(dataList, new DefaultAlgorithmFactory());
   }
 
-  public static Builder of(List<?> itemList, Algorithm.Factory factory) {
-    return new Builder(itemList, factory);
+  public static Builder of(List<?> dataList, Algorithm.Factory factory) {
+    return new Builder(dataList, factory);
   }
 
   public interface OnCreateListener<V extends ViewHolder> {
@@ -29,21 +29,21 @@ public final class Various {
 
   public interface OnBindListener<V extends ViewHolder, T> {
 
-    void onBind(V holder, T item);
+    void onBind(V holder, T data);
   }
 
   public interface OnBindWithPayloadListener<V extends ViewHolder, T> {
-    void onBindWithPayload(V holder, T item, List<Object> payloads);
+    void onBindWithPayload(V holder, T data, List<Object> payloads);
   }
 
   public static class Builder {
 
-    final List<?> itemList;
+    final List<?> dataList;
     final Algorithm.Factory factory;
-    final List<Bundle> bundleList = new ArrayList<>(2);
+    final List<Item> itemList = new ArrayList<>(2);
 
-    Builder(List<?> itemList, Algorithm.Factory factory) {
-      this.itemList = itemList;
+    Builder(List<?> dataList, Algorithm.Factory factory) {
+      this.dataList = dataList;
       this.factory = factory;
     }
 
@@ -60,8 +60,8 @@ public final class Various {
     public <V extends ViewHolder, T> Builder register(Class<T> itemType,
         OnCreateListener<V> onCreateListener, OnBindListener<V, T> onBindListener,
         OnBindWithPayloadListener<V, T> onBindWithPayloadListener) {
-      bundleList.add(
-          new Bundle(itemType, onCreateListener, onBindListener, onBindWithPayloadListener));
+      itemList.add(
+          new Item(itemType, onCreateListener, onBindListener, onBindWithPayloadListener));
       return this;
     }
 
@@ -70,35 +70,19 @@ public final class Various {
     }
   }
 
-  static class Bundle {
-
-    final Class itemType;
-    final OnCreateListener onCreateListener;
-    final OnBindListener onBindListener;
-    final OnBindWithPayloadListener onBindWithPayloadListener;
-
-    Bundle(Class itemType, OnCreateListener onCreateListener, OnBindListener onBindListener,
-        OnBindWithPayloadListener onBindWithPayloadListener) {
-      this.itemType = itemType;
-      this.onCreateListener = onCreateListener;
-      this.onBindListener = onBindListener;
-      this.onBindWithPayloadListener = onBindWithPayloadListener;
-    }
-  }
-
   static class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
-    private final List<?> itemList;
+    private final List<?> dataList;
     private final Algorithm algorithm;
 
     Adapter(Builder builder) {
-      this.itemList = builder.itemList;
-      algorithm = builder.factory.create(builder.bundleList);
+      this.dataList = builder.dataList;
+      algorithm = builder.factory.create(builder.itemList);
     }
 
     @Override public int getItemViewType(int position) {
-      Object item = itemList.get(position);
-      Class itemType = getItemType(item);
+      Object data = dataList.get(position);
+      Class itemType = getItemType(data);
       return algorithm.viewTypeOf(itemType);
     }
 
@@ -117,8 +101,8 @@ public final class Various {
           algorithm.onBindWithPayloadListenerOf(holder.getItemViewType());
 
       if (!payloads.isEmpty() && listener != null) {
-        Object item = itemList.get(position);
-        listener.onBindWithPayload(holder, item, payloads);
+        Object data = dataList.get(position);
+        listener.onBindWithPayload(holder, data, payloads);
       } else {
         onBindViewHolder(holder, position);
       }
@@ -128,13 +112,13 @@ public final class Various {
       OnBindListener listener = algorithm.onBindListenerOf(holder.getItemViewType());
 
       if (listener != null) {
-        Object item = itemList.get(position);
-        listener.onBind(holder, item);
+        Object data = dataList.get(position);
+        listener.onBind(holder, data);
       }
     }
 
     @Override public int getItemCount() {
-      return itemList.size();
+      return dataList.size();
     }
 
     @Override public boolean onFailedToRecycleView(ViewHolder holder) {
