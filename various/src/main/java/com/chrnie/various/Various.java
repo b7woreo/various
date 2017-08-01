@@ -60,8 +60,7 @@ public final class Various {
     public <V extends ViewHolder, T> Builder register(Class<T> itemType,
         OnCreateListener<V> onCreateListener, OnBindListener<V, T> onBindListener,
         OnBindWithPayloadListener<V, T> onBindWithPayloadListener) {
-      itemList.add(
-          new Item(itemType, onCreateListener, onBindListener, onBindWithPayloadListener));
+      itemList.add(new Item(itemType, onCreateListener, onBindListener, onBindWithPayloadListener));
       return this;
     }
 
@@ -150,19 +149,19 @@ public final class Various {
       super(itemView);
     }
 
-    public boolean onFailedToRecycleView() {
+    protected boolean onFailedToRecycleView() {
       return false;
     }
 
-    public void onViewAttachedToWindow() {
+    protected void onViewAttachedToWindow() {
 
     }
 
-    public void onViewDetachedFromWindow() {
+    protected void onViewDetachedFromWindow() {
 
     }
 
-    public void onViewRecycled() {
+    protected void onViewRecycled() {
 
     }
   }
