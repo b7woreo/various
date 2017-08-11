@@ -5,7 +5,7 @@
 ## 用法
 ### 1. 添加依赖
 ```
-compile 'com.chrnie:various:0.2.1'
+compile 'com.chrnie:various:0.2.2'
 ```
 
 ### 2. 编写数据类型和ViewHolder
@@ -81,7 +81,7 @@ public class MyLifecycleViewHolder extends Various.LifecycleViewHolder {
 ### 2. 复杂类型列表性能问题
 进过测试，在一般情况下（一个列表有几十种类型Item）默认的算法不会存在性能瓶颈。在极端情况下（一个列表有成百上千种类型的Item）给出了一个基于二分查找的算法，可以提升性能（在类型数量巨大时才会有明显提升，正常不推荐使用）。
 ``` java
-Various.of(dataList, new BinarySearchItemPool());
+Various.of(dataList, new BinarySearchAlgorithmFactory());
 ```
 
 ## License
