@@ -1,8 +1,8 @@
 package com.chrnie.various;
 
 public class ItemNotFoundException extends RuntimeException {
-  public ItemNotFoundException(Class itemType) {
+  public ItemNotFoundException(Class dateType) {
     super(String.format("%s not found match item, make sure it has been registered",
-        itemType.getName()));
+        dateType.getName()));
   }
 }
