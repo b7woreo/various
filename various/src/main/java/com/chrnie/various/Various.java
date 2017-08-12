@@ -1,5 +1,6 @@
 package com.chrnie.various;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ public final class Various {
   }
 
   public interface OnBindWithPayloadListener<V extends ViewHolder, T> {
+
     void onBindWithPayload(V holder, T data, List<Object> payloads);
   }
 
@@ -79,7 +81,8 @@ public final class Various {
       algorithm = builder.factory.create(builder.itemList);
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
       Object data = dataList.get(position);
       Class itemType = getItemType(data);
       return algorithm.viewTypeOf(itemType);
@@ -89,13 +92,15 @@ public final class Various {
       return item.getClass();
     }
 
-    @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
       OnCreateListener listener = algorithm.onCreateListenerOf(viewType);
       LayoutInflater inflater = LayoutInflater.from(parent.getContext());
       return listener.onCreate(inflater, parent);
     }
 
-    @Override public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
       OnBindWithPayloadListener listener =
           algorithm.onBindWithPayloadListenerOf(holder.getItemViewType());
 
@@ -107,7 +112,8 @@ public final class Various {
       }
     }
 
-    @Override public void onBindViewHolder(ViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
       OnBindListener listener = algorithm.onBindListenerOf(holder.getItemViewType());
 
       if (listener != null) {
@@ -116,28 +122,33 @@ public final class Various {
       }
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
       return dataList.size();
     }
 
-    @Override public boolean onFailedToRecycleView(ViewHolder holder) {
+    @Override
+    public boolean onFailedToRecycleView(ViewHolder holder) {
       return holder instanceof LifecycleViewHolder
           && ((LifecycleViewHolder) holder).onFailedToRecycleView();
     }
 
-    @Override public void onViewAttachedToWindow(ViewHolder holder) {
+    @Override
+    public void onViewAttachedToWindow(ViewHolder holder) {
       if (holder instanceof LifecycleViewHolder) {
         ((LifecycleViewHolder) holder).onViewAttachedToWindow();
       }
     }
 
-    @Override public void onViewDetachedFromWindow(ViewHolder holder) {
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
       if (holder instanceof LifecycleViewHolder) {
         ((LifecycleViewHolder) holder).onViewDetachedFromWindow();
       }
     }
 
-    @Override public void onViewRecycled(ViewHolder holder) {
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
       if (holder instanceof LifecycleViewHolder) {
         ((LifecycleViewHolder) holder).onViewRecycled();
       }
@@ -145,8 +156,13 @@ public final class Various {
   }
 
   public static abstract class LifecycleViewHolder extends RecyclerView.ViewHolder {
+
     public LifecycleViewHolder(View itemView) {
       super(itemView);
+    }
+
+    public Context getContext() {
+      return itemView.getContext();
     }
 
     protected boolean onFailedToRecycleView() {
