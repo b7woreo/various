@@ -2,13 +2,13 @@
 
 buildscript {
   ext.compileSdkVersion = 26
-  ext.buildToolsVersion = "26.0.1"
-  ext.minSdkVersion = 9
+  ext.buildToolsVersion = "26.0.2"
+  ext.minSdkVersion = 14
   ext.targetSdkVersion = 26
   ext.versionCode = 5
   ext.versionName = "0.3.0"
 
-  def supportVersion = "26.0.0"
+  def supportVersion = "26.1.0"
 
   ext.libs = ["recyclerview-v7": "com.android.support:recyclerview-v7:${supportVersion}",
               "test-runner"    : "com.android.support.test:runner:0.5"]
@@ -18,8 +18,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.0-alpha4'
-    classpath 'me.tatarka:gradle-retrolambda:3.7.0'
+    classpath 'com.android.tools.build:gradle:3.0.0'
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     // NOTE: Do not place your application dependencies here; they belong
