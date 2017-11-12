@@ -1,27 +1,25 @@
 package com.chrnie.various;
 
+import com.chrnie.various.Various.OnBindCallback;
+import com.chrnie.various.Various.OnCreateCallback;
 import java.util.List;
 
 public abstract class ItemMatcher {
 
-  public abstract int viewTypeOf(Class dateType);
+  public abstract int getViewType(Class dateType);
 
-  public abstract Item itemOf(int viewType);
+  public abstract Item getItem(int viewType);
 
-  final Various.OnCreateListener onCreateListenerOf(int viewType) {
-    return itemOf(viewType).onCreateListener;
+  final OnCreateCallback getOnCreateCallback(int viewType) {
+    return getItem(viewType).onCreateCallback;
   }
 
-  final Various.OnBindListener onBindListenerOf(int viewType) {
-    return itemOf(viewType).onBindListener;
+  final OnBindCallback getOnBindCallback(int viewType) {
+    return getItem(viewType).onBindCallback;
   }
 
-  final Various.OnBindWithPayloadListener onBindWithPayloadListenerOf(int viewType) {
-    return itemOf(viewType).onBindWithPayloadListener;
-  }
+  public interface Factory {
 
-  public static abstract class Factory {
-
-    public abstract ItemMatcher create(List<Item> itemList);
+    ItemMatcher create(List<Item> itemList);
   }
 }

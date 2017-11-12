@@ -2,7 +2,6 @@ package com.chrnie.various;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,19 +22,14 @@ public final class Various {
     return new Builder(dataList, factory);
   }
 
-  public interface OnCreateListener<V extends ViewHolder> {
+  public interface OnCreateCallback<VH extends RecyclerView.ViewHolder> {
 
-    V onCreate(LayoutInflater inflater, ViewGroup container);
+    VH onCreate(LayoutInflater inflater, ViewGroup container);
   }
 
-  public interface OnBindListener<V extends ViewHolder, T> {
+  public interface OnBindCallback<VH extends RecyclerView.ViewHolder, T> {
 
-    void onBind(V holder, T data);
-  }
-
-  public interface OnBindWithPayloadListener<V extends ViewHolder, T> {
-
-    void onBindWithPayload(V holder, T data, List<Object> payloads);
+    void onBind(VH holder, T data, List<Object> payloads);
   }
 
   public static class Builder {
@@ -49,117 +43,34 @@ public final class Various {
       this.factory = factory;
     }
 
-    public <V extends ViewHolder, T> Builder register(Class<T> itemType,
-        OnCreateListener<V> onCreateListener) {
-      return register(itemType, onCreateListener, null);
+    public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
+        OnCreateCallback<VH> onCreateCallback) {
+      return register(dateType, onCreateCallback, null);
     }
 
-    public <V extends ViewHolder, T> Builder register(Class<T> itemType,
-        OnCreateListener<V> onCreateListener, OnBindListener<V, T> onBindListener) {
-      return register(itemType, onCreateListener, onBindListener, null);
-    }
-
-    public <V extends ViewHolder, T> Builder register(Class<T> itemType,
-        OnCreateListener<V> onCreateListener, OnBindListener<V, T> onBindListener,
-        OnBindWithPayloadListener<V, T> onBindWithPayloadListener) {
-      itemList.add(new Item(itemType, onCreateListener, onBindListener, onBindWithPayloadListener));
+    public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
+        OnCreateCallback<VH> onCreateCallback, OnBindCallback<VH, T> onBindCallback) {
+      itemList.add(new Item(dateType, onCreateCallback, onBindCallback));
       return this;
     }
 
-    public RecyclerView.Adapter<ViewHolder> build() {
+    public <T, VH extends ViewHolder<T>> Builder register(Class<T> dateType,
+        ViewHolderFactory<T, VH> factory) {
+      return register(dateType, factory::create, ViewHolder::bind);
+    }
+
+    public RecyclerView.Adapter<RecyclerView.ViewHolder> build() {
       return new Adapter(this);
     }
   }
 
-  static class Adapter extends RecyclerView.Adapter<ViewHolder> {
+  public abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
 
-    private final List<?> dataList;
-    private final ItemMatcher itemMatcher;
-
-    Adapter(Builder builder) {
-      this.dataList = builder.dataList;
-      itemMatcher = builder.factory.create(builder.itemList);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-      Object data = dataList.get(position);
-      Class itemType = getItemType(data);
-      return itemMatcher.viewTypeOf(itemType);
-    }
-
-    private Class getItemType(Object item) {
-      return item.getClass();
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      OnCreateListener listener = itemMatcher.onCreateListenerOf(viewType);
-      LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-      return listener.onCreate(inflater, parent);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
-      OnBindWithPayloadListener listener =
-          itemMatcher.onBindWithPayloadListenerOf(holder.getItemViewType());
-
-      if (!payloads.isEmpty() && listener != null) {
-        Object data = dataList.get(position);
-        listener.onBindWithPayload(holder, data, payloads);
-      } else {
-        onBindViewHolder(holder, position);
-      }
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-      OnBindListener listener = itemMatcher.onBindListenerOf(holder.getItemViewType());
-
-      if (listener != null) {
-        Object data = dataList.get(position);
-        listener.onBind(holder, data);
-      }
-    }
-
-    @Override
-    public int getItemCount() {
-      return dataList.size();
-    }
-
-    @Override
-    public boolean onFailedToRecycleView(ViewHolder holder) {
-      return holder instanceof LifecycleViewHolder
-          && ((LifecycleViewHolder) holder).onFailedToRecycleView();
-    }
-
-    @Override
-    public void onViewAttachedToWindow(ViewHolder holder) {
-      if (holder instanceof LifecycleViewHolder) {
-        ((LifecycleViewHolder) holder).onViewAttachedToWindow();
-      }
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(ViewHolder holder) {
-      if (holder instanceof LifecycleViewHolder) {
-        ((LifecycleViewHolder) holder).onViewDetachedFromWindow();
-      }
-    }
-
-    @Override
-    public void onViewRecycled(ViewHolder holder) {
-      if (holder instanceof LifecycleViewHolder) {
-        ((LifecycleViewHolder) holder).onViewRecycled();
-      }
-    }
-  }
-
-  public static abstract class LifecycleViewHolder extends RecyclerView.ViewHolder {
-
-    public LifecycleViewHolder(View itemView) {
+    public ViewHolder(View itemView) {
       super(itemView);
     }
+
+    protected abstract void bind(T date, List<Object> payloads);
 
     public Context getContext() {
       return itemView.getContext();

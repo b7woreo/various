@@ -1,18 +1,17 @@
 package com.chrnie.various;
 
+import com.chrnie.various.Various.OnBindCallback;
+import com.chrnie.various.Various.OnCreateCallback;
+
 public final class Item {
 
   public final Class dateType;
-  final Various.OnCreateListener onCreateListener;
-  final Various.OnBindListener onBindListener;
-  final Various.OnBindWithPayloadListener onBindWithPayloadListener;
+  final OnCreateCallback onCreateCallback;
+  final OnBindCallback onBindCallback;
 
-  Item(Class dateType, Various.OnCreateListener onCreateListener,
-      Various.OnBindListener onBindListener,
-      Various.OnBindWithPayloadListener onBindWithPayloadListener) {
+  Item(Class dateType, OnCreateCallback onCreateCallback, OnBindCallback onBindCallback) {
     this.dateType = dateType;
-    this.onCreateListener = onCreateListener;
-    this.onBindListener = onBindListener;
-    this.onBindWithPayloadListener = onBindWithPayloadListener;
+    this.onCreateCallback = onCreateCallback;
+    this.onBindCallback = onBindCallback;
   }
 }

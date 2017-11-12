@@ -52,7 +52,7 @@ import static org.junit.Assert.assertEquals;
     adapter.onViewRecycled(viewHolder);
   }
 
-  private static class TestViewHolder extends Various.LifecycleViewHolder {
+  private static class TestViewHolder extends Various.ViewHolder {
 
     private TestViewHolder(View itemView) {
       super(itemView);
