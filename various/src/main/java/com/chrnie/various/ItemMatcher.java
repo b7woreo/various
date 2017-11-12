@@ -2,7 +2,7 @@ package com.chrnie.various;
 
 import java.util.List;
 
-public abstract class Algorithm {
+public abstract class ItemMatcher {
 
   public abstract int viewTypeOf(Class dateType);
 
@@ -22,6 +22,6 @@ public abstract class Algorithm {
 
   public static abstract class Factory {
 
-    public abstract Algorithm create(List<Item> itemList);
+    public abstract ItemMatcher create(List<Item> itemList);
   }
 }

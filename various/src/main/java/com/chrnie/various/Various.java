@@ -16,10 +16,10 @@ public final class Various {
   }
 
   public static Builder of(List<?> dataList) {
-    return Various.of(dataList, new DefaultAlgorithmFactory());
+    return Various.of(dataList, new DefaultItemMatcherFactory());
   }
 
-  public static Builder of(List<?> dataList, Algorithm.Factory factory) {
+  public static Builder of(List<?> dataList, ItemMatcher.Factory factory) {
     return new Builder(dataList, factory);
   }
 
@@ -41,10 +41,10 @@ public final class Various {
   public static class Builder {
 
     final List<?> dataList;
-    final Algorithm.Factory factory;
+    final ItemMatcher.Factory factory;
     final List<Item> itemList = new ArrayList<>(2);
 
-    Builder(List<?> dataList, Algorithm.Factory factory) {
+    Builder(List<?> dataList, ItemMatcher.Factory factory) {
       this.dataList = dataList;
       this.factory = factory;
     }
@@ -74,18 +74,18 @@ public final class Various {
   static class Adapter extends RecyclerView.Adapter<ViewHolder> {
 
     private final List<?> dataList;
-    private final Algorithm algorithm;
+    private final ItemMatcher itemMatcher;
 
     Adapter(Builder builder) {
       this.dataList = builder.dataList;
-      algorithm = builder.factory.create(builder.itemList);
+      itemMatcher = builder.factory.create(builder.itemList);
     }
 
     @Override
     public int getItemViewType(int position) {
       Object data = dataList.get(position);
       Class itemType = getItemType(data);
-      return algorithm.viewTypeOf(itemType);
+      return itemMatcher.viewTypeOf(itemType);
     }
 
     private Class getItemType(Object item) {
@@ -94,7 +94,7 @@ public final class Various {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-      OnCreateListener listener = algorithm.onCreateListenerOf(viewType);
+      OnCreateListener listener = itemMatcher.onCreateListenerOf(viewType);
       LayoutInflater inflater = LayoutInflater.from(parent.getContext());
       return listener.onCreate(inflater, parent);
     }
@@ -102,7 +102,7 @@ public final class Various {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
       OnBindWithPayloadListener listener =
-          algorithm.onBindWithPayloadListenerOf(holder.getItemViewType());
+          itemMatcher.onBindWithPayloadListenerOf(holder.getItemViewType());
 
       if (!payloads.isEmpty() && listener != null) {
         Object data = dataList.get(position);
@@ -114,7 +114,7 @@ public final class Various {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-      OnBindListener listener = algorithm.onBindListenerOf(holder.getItemViewType());
+      OnBindListener listener = itemMatcher.onBindListenerOf(holder.getItemViewType());
 
       if (listener != null) {
         Object data = dataList.get(position);

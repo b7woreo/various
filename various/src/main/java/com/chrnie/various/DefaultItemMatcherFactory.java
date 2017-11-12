@@ -3,18 +3,18 @@ package com.chrnie.various;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class DefaultAlgorithmFactory extends Algorithm.Factory {
+public final class DefaultItemMatcherFactory extends ItemMatcher.Factory {
 
   @Override
-  public Algorithm create(List<Item> itemList) {
-    return new DefaultAlgorithm(itemList);
+  public ItemMatcher create(List<Item> itemList) {
+    return new DefaultItemMatcher(itemList);
   }
 
-  static final class DefaultAlgorithm extends Algorithm {
+  static final class DefaultItemMatcher extends ItemMatcher {
 
     private List<Item> itemList;
 
-    DefaultAlgorithm(List<Item> itemList) {
+    DefaultItemMatcher(List<Item> itemList) {
       this.itemList = new ArrayList<>(itemList);
     }
 
