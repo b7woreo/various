@@ -10,12 +10,12 @@ import com.chrnie.various.Various.OnCreateCallback;
 import java.util.Collections;
 import java.util.List;
 
-class Adapter extends RecyclerView.Adapter<ViewHolder> {
+class AdapterImpl extends RecyclerView.Adapter<ViewHolder> {
 
   private final List<?> dataList;
   private final ItemMatcher itemMatcher;
 
-  Adapter(Builder builder) {
+  AdapterImpl(Builder builder) {
     this.dataList = builder.dataList;
     itemMatcher = builder.factory.create(builder.itemList);
   }
@@ -23,31 +23,26 @@ class Adapter extends RecyclerView.Adapter<ViewHolder> {
   @Override
   public int getItemViewType(int position) {
     Object data = dataList.get(position);
-    Class itemType = getItemType(data);
-    return itemMatcher.getViewType(itemType);
-  }
-
-  private Class getItemType(Object item) {
-    return item.getClass();
+    return itemMatcher.getViewType(data);
   }
 
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    OnCreateCallback listener = itemMatcher.getOnCreateCallback(viewType);
+    OnCreateCallback listener = itemMatcher.getItem(viewType).onCreateCallback;
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
     return listener.onCreate(inflater, parent);
   }
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
-    OnBindCallback listener = itemMatcher.getOnBindCallback(holder.getItemViewType());
+    OnBindCallback listener = itemMatcher.getItem(holder.getItemViewType()).onBindCallback;
     Object date = dataList.get(position);
     listener.onBind(holder, date, payloads);
   }
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    OnBindCallback listener = itemMatcher.getOnBindCallback(holder.getItemViewType());
+    OnBindCallback listener = itemMatcher.getItem(holder.getItemViewType()).onBindCallback;
     Object date = dataList.get(position);
     listener.onBind(holder, date, Collections.emptyList());
   }

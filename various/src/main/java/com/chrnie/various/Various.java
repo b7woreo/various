@@ -15,7 +15,7 @@ public final class Various {
   }
 
   public static Builder of(List<?> dataList) {
-    return Various.of(dataList, new DefaultItemMatcherFactory());
+    return Various.of(dataList, DefaultItemMatcherFactory.getInstance());
   }
 
   public static Builder of(List<?> dataList, ItemMatcher.Factory factory) {
@@ -44,27 +44,28 @@ public final class Various {
     }
 
     public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
-        OnCreateCallback<VH> onCreateCallback) {
+                                                                    OnCreateCallback<VH> onCreateCallback) {
       return register(dateType, onCreateCallback, null);
     }
 
     public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
-        OnCreateCallback<VH> onCreateCallback, OnBindCallback<VH, T> onBindCallback) {
+                                                                    OnCreateCallback<VH> onCreateCallback,
+                                                                    OnBindCallback<VH, T> onBindCallback) {
       itemList.add(new Item(dateType, onCreateCallback, onBindCallback));
       return this;
     }
 
     public <T, VH extends ViewHolder<T>> Builder register(Class<T> dateType,
-        ViewHolderFactory<T, VH> factory) {
+                                                          ViewHolderFactory<T, VH> factory) {
       return register(dateType, factory::create, ViewHolder::bind);
     }
 
     public RecyclerView.Adapter<RecyclerView.ViewHolder> build() {
-      return new Adapter(this);
+      return new AdapterImpl(this);
     }
   }
 
-  public abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
+  public static abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
 
     public ViewHolder(View itemView) {
       super(itemView);

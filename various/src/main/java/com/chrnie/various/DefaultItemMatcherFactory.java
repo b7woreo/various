@@ -1,39 +1,63 @@
 package com.chrnie.various;
 
-import java.util.ArrayList;
+import android.support.v4.util.ArrayMap;
+import android.util.SparseArray;
 import java.util.List;
 
 public final class DefaultItemMatcherFactory implements ItemMatcher.Factory {
+
+  private static final DefaultItemMatcherFactory INSTANCE = new DefaultItemMatcherFactory();
+
+  public static DefaultItemMatcherFactory getInstance() {
+    return INSTANCE;
+  }
+
+  private DefaultItemMatcherFactory() {
+
+  }
 
   @Override
   public ItemMatcher create(List<Item> itemList) {
     return new DefaultItemMatcher(itemList);
   }
 
-  static final class DefaultItemMatcher extends ItemMatcher {
+  static final class DefaultItemMatcher implements ItemMatcher {
 
-    private List<Item> itemList;
+    private static final ArrayMap<Class, Integer> CLASS_OF_INDEX = new ArrayMap<>(8);
+
+    private final SparseArray<Item> indexOfItem;
 
     DefaultItemMatcher(List<Item> itemList) {
-      this.itemList = new ArrayList<>(itemList);
+      indexOfItem = new SparseArray<>(itemList.size());
+      for (Item item : itemList) {
+        Class clz = item.dateType;
+
+        Integer index = CLASS_OF_INDEX.get(clz);
+        if (index == null) {
+          index = CLASS_OF_INDEX.size() + 1;
+          CLASS_OF_INDEX.put(clz, index);
+        }
+
+        indexOfItem.put(index, item);
+      }
     }
 
     @Override
-    public int getViewType(Class dateType) {
-      for (int i = 0; i < itemList.size(); i++) {
-        Item bundle = itemList.get(i);
-        if (dateType.equals(bundle.dateType)) {
-          return i;
-        }
+    public int getViewType(Object date) {
+      Class clz = date.getClass();
+
+      Integer index = CLASS_OF_INDEX.get(clz);
+      if (index == null) {
+        throw new RuntimeException(
+            String.format("%s not found match item, make sure it has been registered", clz.getName()));
       }
-      throw new RuntimeException(
-          String.format("%s not found match item, make sure it has been registered",
-              dateType.getName()));
+
+      return index;
     }
 
     @Override
     public Item getItem(int viewType) {
-      return itemList.get(viewType);
+      return indexOfItem.get(viewType);
     }
   }
 }
