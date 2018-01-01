@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.View;
+import com.chrnie.various.Various.ViewHolderCallback;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +62,7 @@ public class AdapterImplTest {
     Assert.assertEquals(true, viewHolder.onViewRecycled);
   }
 
-  public static class TestViewHolder extends Various.ViewHolder {
+  public static class TestViewHolder extends ViewHolder implements ViewHolderCallback {
 
     boolean onFailedToRecycleView = false;
     boolean onViewAttachedToWindow = false;
@@ -79,25 +80,25 @@ public class AdapterImplTest {
     }
 
     @Override
-    protected boolean onFailedToRecycleView() {
+    public boolean onFailedToRecycleView() {
       onFailedToRecycleView = true;
       return super.onFailedToRecycleView();
     }
 
     @Override
-    protected void onViewAttachedToWindow() {
+    public void onViewAttachedToWindow() {
       onViewAttachedToWindow = true;
       super.onViewAttachedToWindow();
     }
 
     @Override
-    protected void onViewDetachedFromWindow() {
+    public void onViewDetachedFromWindow() {
       onViewDetachedFromWindow = true;
       super.onViewDetachedFromWindow();
     }
 
     @Override
-    protected void onViewRecycled() {
+    public void onViewRecycled() {
       onViewRecycled = true;
       super.onViewRecycled();
     }
