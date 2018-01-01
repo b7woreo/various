@@ -1,10 +1,9 @@
 package com.chrnie.various;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+import com.chrnie.various.ViewHolder.Factory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,19 +43,19 @@ public final class Various {
     }
 
     public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
-                                                                    OnCreateCallback<VH> onCreateCallback) {
+        OnCreateCallback<VH> onCreateCallback) {
       return register(dateType, onCreateCallback, null);
     }
 
     public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
-                                                                    OnCreateCallback<VH> onCreateCallback,
-                                                                    OnBindCallback<VH, T> onBindCallback) {
+        OnCreateCallback<VH> onCreateCallback,
+        OnBindCallback<VH, T> onBindCallback) {
       itemList.add(new Item(dateType, onCreateCallback, onBindCallback));
       return this;
     }
 
     public <T, VH extends ViewHolder<T>> Builder register(Class<T> dateType,
-                                                          ViewHolderFactory<T, VH> factory) {
+        Factory<T, VH> factory) {
       return register(dateType, factory::create, ViewHolder::bind);
     }
 
@@ -65,32 +64,19 @@ public final class Various {
     }
   }
 
-  public static abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
+  public interface ViewHolderCallback {
 
-    public ViewHolder(View itemView) {
-      super(itemView);
-    }
-
-    protected abstract void bind(T date, List<Object> payloads);
-
-    public Context getContext() {
-      return itemView.getContext();
-    }
-
-    protected boolean onFailedToRecycleView() {
+    default boolean onFailedToRecycleView() {
       return false;
     }
 
-    protected void onViewAttachedToWindow() {
-
+    default void onViewAttachedToWindow() {
     }
 
-    protected void onViewDetachedFromWindow() {
-
+    default void onViewDetachedFromWindow() {
     }
 
-    protected void onViewRecycled() {
-
+    default void onViewRecycled() {
     }
   }
 }

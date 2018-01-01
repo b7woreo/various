@@ -54,28 +54,28 @@ class AdapterImpl extends RecyclerView.Adapter<ViewHolder> {
 
   @Override
   public boolean onFailedToRecycleView(ViewHolder holder) {
-    return holder instanceof Various.ViewHolder
-        && ((Various.ViewHolder) holder).onFailedToRecycleView();
+    return holder instanceof Various.ViewHolderCallback
+        && ((Various.ViewHolderCallback) holder).onFailedToRecycleView();
   }
 
   @Override
   public void onViewAttachedToWindow(ViewHolder holder) {
-    if (holder instanceof Various.ViewHolder) {
-      ((Various.ViewHolder) holder).onViewAttachedToWindow();
+    if (holder instanceof Various.ViewHolderCallback) {
+      ((Various.ViewHolderCallback) holder).onViewAttachedToWindow();
     }
   }
 
   @Override
   public void onViewDetachedFromWindow(ViewHolder holder) {
-    if (holder instanceof Various.ViewHolder) {
-      ((Various.ViewHolder) holder).onViewDetachedFromWindow();
+    if (holder instanceof Various.ViewHolderCallback) {
+      ((Various.ViewHolderCallback) holder).onViewDetachedFromWindow();
     }
   }
 
   @Override
   public void onViewRecycled(ViewHolder holder) {
-    if (holder instanceof Various.ViewHolder) {
-      ((Various.ViewHolder) holder).onViewRecycled();
+    if (holder instanceof Various.ViewHolderCallback) {
+      ((Various.ViewHolderCallback) holder).onViewRecycled();
     }
   }
 }
