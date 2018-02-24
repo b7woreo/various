@@ -1,5 +1,6 @@
 package com.chrnie.various;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,22 +14,25 @@ public final class Various {
     throw new IllegalStateException("none constructor");
   }
 
-  public static Builder of(List<?> dataList) {
+  @NonNull
+  public static Builder of(@NonNull List<?> dataList) {
     return Various.of(dataList, DefaultItemMatcherFactory.getInstance());
   }
 
-  public static Builder of(List<?> dataList, ItemMatcher.Factory factory) {
+  @NonNull
+  public static Builder of(@NonNull List<?> dataList, @NonNull ItemMatcher.Factory factory) {
     return new Builder(dataList, factory);
   }
 
   public interface OnCreateCallback<VH extends RecyclerView.ViewHolder> {
 
-    VH onCreate(LayoutInflater inflater, ViewGroup container);
+    @NonNull
+    VH onCreate(@NonNull LayoutInflater inflater, @NonNull ViewGroup container);
   }
 
   public interface OnBindCallback<VH extends RecyclerView.ViewHolder, T> {
 
-    void onBind(VH holder, T data, List<Object> payloads);
+    void onBind(@NonNull VH holder, @NonNull T data, @NonNull List<Object> payloads);
   }
 
   public static class Builder {
@@ -42,23 +46,32 @@ public final class Various {
       this.factory = factory;
     }
 
-    public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
-        OnCreateCallback<VH> onCreateCallback) {
-      return register(dateType, onCreateCallback, null);
+    @NonNull
+    public <VH extends RecyclerView.ViewHolder, T> Builder register(
+        @NonNull Class<T> dateType,
+        @NonNull OnCreateCallback<VH> onCreateCallback) {
+      return register(dateType, onCreateCallback, (holder, data, payloads) -> {
+        // empty;
+      });
     }
 
-    public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
-        OnCreateCallback<VH> onCreateCallback,
-        OnBindCallback<VH, ? super T> onBindCallback) {
+    @NonNull
+    public <VH extends RecyclerView.ViewHolder, T> Builder register(
+        @NonNull Class<T> dateType,
+        @NonNull OnCreateCallback<VH> onCreateCallback,
+        @NonNull OnBindCallback<VH, ? super T> onBindCallback) {
       itemList.add(new Item(dateType, onCreateCallback, onBindCallback));
       return this;
     }
 
-    public <T> Builder register(Class<T> dateType,
-        Factory<? super T, ? extends ViewHolder<? super T>> factory) {
+    @NonNull
+    public <T> Builder register(
+        @NonNull Class<T> dateType,
+        @NonNull Factory<? super T, ? extends ViewHolder<? super T>> factory) {
       return register(dateType, factory::create, ViewHolder::bind);
     }
 
+    @NonNull
     public RecyclerView.Adapter<RecyclerView.ViewHolder> build() {
       return new AdapterImpl(this);
     }

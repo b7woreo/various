@@ -1,15 +1,17 @@
 package com.chrnie.various;
 
+import android.support.annotation.NonNull;
 import java.util.List;
 
 public interface ItemMatcher {
 
-  int getViewType(Object date);
+  int getViewType(@NonNull Object date);
 
+  @NonNull
   Item getItem(int viewType);
 
   interface Factory {
-
-    ItemMatcher create(List<Item> itemList);
+    @NonNull
+    ItemMatcher create(@NonNull List<Item> itemList);
   }
 }

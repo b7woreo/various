@@ -1,5 +1,6 @@
 package com.chrnie.various;
 
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
@@ -75,7 +76,7 @@ public class AdapterImplTest {
     }
 
     @Override
-    protected void bind(Object date, List payloads) {
+    protected void bind(@NonNull Object date, @NonNull List payloads) {
       bindCount += 1;
     }
 

@@ -1,23 +1,25 @@
 package com.chrnie.various;
 
+import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.util.SparseArray;
 import java.util.List;
 
-public final class DefaultItemMatcherFactory implements ItemMatcher.Factory {
+final class DefaultItemMatcherFactory implements ItemMatcher.Factory {
 
   private static final DefaultItemMatcherFactory INSTANCE = new DefaultItemMatcherFactory();
 
-  public static DefaultItemMatcherFactory getInstance() {
+  static DefaultItemMatcherFactory getInstance() {
     return INSTANCE;
   }
 
   private DefaultItemMatcherFactory() {
-
+    // hide constructor;
   }
 
+  @NonNull
   @Override
-  public ItemMatcher create(List<Item> itemList) {
+  public ItemMatcher create(@NonNull List<Item> itemList) {
     return new DefaultItemMatcher(itemList);
   }
 
@@ -43,7 +45,7 @@ public final class DefaultItemMatcherFactory implements ItemMatcher.Factory {
     }
 
     @Override
-    public int getViewType(Object date) {
+    public int getViewType(@NonNull Object date) {
       Class clz = date.getClass();
 
       Integer index = CLASS_OF_INDEX.get(clz);
@@ -55,6 +57,7 @@ public final class DefaultItemMatcherFactory implements ItemMatcher.Factory {
       return index;
     }
 
+    @NonNull
     @Override
     public Item getItem(int viewType) {
       return indexOfItem.get(viewType);
