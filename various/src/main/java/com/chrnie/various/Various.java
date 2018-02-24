@@ -49,13 +49,13 @@ public final class Various {
 
     public <VH extends RecyclerView.ViewHolder, T> Builder register(Class<T> dateType,
         OnCreateCallback<VH> onCreateCallback,
-        OnBindCallback<VH, T> onBindCallback) {
+        OnBindCallback<VH, ? super T> onBindCallback) {
       itemList.add(new Item(dateType, onCreateCallback, onBindCallback));
       return this;
     }
 
-    public <T, VH extends ViewHolder<T>> Builder register(Class<T> dateType,
-        Factory<T, VH> factory) {
+    public <T> Builder register(Class<T> dateType,
+        Factory<? super T, ? extends ViewHolder<? super T>> factory) {
       return register(dateType, factory::create, ViewHolder::bind);
     }
 
