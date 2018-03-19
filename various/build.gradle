@@ -1,8 +1,10 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply from: './mvn.gradle'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
@@ -24,6 +26,7 @@ android {
 }
 
 dependencies {
-    androidTestImplementation rootProject.libs["test-runner"]
-    implementation rootProject.libs["recyclerview-v7"]
+    implementation rootProject.lib["kotlin-stdlib-jre7"]
+    implementation rootProject.lib["recyclerview-v7"]
+    androidTestImplementation rootProject.lib["test-runner"]
 }

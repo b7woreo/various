@@ -1,11 +1,26 @@
-ext.versionCode = 7
-ext.versionName = "0.3.2"
+ext {
+    versionCode = 7
+    versionName = "0.3.2"
+}
 
-ext.compileSdkVersion = 27
-ext.minSdkVersion = 14
-ext.targetSdkVersion = 27
+ext {
+    buildToolsVersion = "27.0.3"
+    compileSdkVersion = 27
+    minSdkVersion = 14
+    targetSdkVersion = 27
+}
 
-ext.libs = [
-        "recyclerview-v7": "com.android.support:recyclerview-v7:27.0.2",
-        "test-runner"    : "com.android.support.test:runner:0.5"
+def kotlin_version = "1.2.30"
+
+ext.plugin = [
+        "android"      : "com.android.tools.build:gradle:3.0.1",
+        "kotlin"       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}",
+        "bintray"      : "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3",
+        "android-maven": "com.github.dcendents:android-maven-gradle-plugin:1.5",
+]
+
+ext.lib = [
+        "kotlin-stdlib-jre7": "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlin_version}",
+        "recyclerview-v7"   : "com.android.support:recyclerview-v7:27.0.2",
+        "test-runner"       : "com.android.support.test:runner:0.5"
 ]
