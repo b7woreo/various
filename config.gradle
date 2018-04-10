@@ -10,10 +10,10 @@ ext {
     targetSdkVersion = 27
 }
 
-def kotlin_version = "1.2.30"
+def kotlin_version = "1.2.31"
 
 ext.plugin = [
-        "android"      : "com.android.tools.build:gradle:3.0.1",
+        "android"      : "com.android.tools.build:gradle:3.1.1",
         "kotlin"       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}",
         "bintray"      : "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3",
         "android-maven": "com.github.dcendents:android-maven-gradle-plugin:1.5",
