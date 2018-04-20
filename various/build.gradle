@@ -21,6 +21,6 @@ android {
 
 dependencies {
     androidTestImplementation lib["test-runner"]
-    implementation lib["kotlin-stdlib-jre7"]
-    implementation lib["recyclerview-v7"]
+    implementation lib["kotlin-stdlib"]
+    implementation lib["recyclerview"]
 }
