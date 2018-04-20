@@ -1,6 +1,10 @@
+def major = 0
+def minor = 4
+def patch = 0
+
 ext {
-    versionCode = 8
-    versionName = "0.4.0"
+    versionCode = major * 1000000 + minor * 10000 + patch
+    versionName = "${major}.${minor}.${patch}"
 }
 
 ext {
@@ -15,7 +19,6 @@ def kotlin_version = "1.2.31"
 ext.plugin = [
         "android"      : "com.android.tools.build:gradle:3.1.1",
         "kotlin"       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}",
-        "bintray"      : "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3",
         "android-maven": "com.github.dcendents:android-maven-gradle-plugin:1.5",
 ]
 
