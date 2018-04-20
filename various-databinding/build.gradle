@@ -17,9 +17,14 @@ android {
     libraryVariants.all {
         it.generateBuildConfig.enabled = false
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
+    implementation project(":various")
     androidTestImplementation lib["test-runner"]
     implementation lib["kotlin-stdlib-jre7"]
     implementation lib["recyclerview-v7"]
