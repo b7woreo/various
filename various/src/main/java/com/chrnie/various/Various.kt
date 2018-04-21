@@ -11,15 +11,15 @@ object Various {
         private val itemList = ArrayList<Item<*, *>>()
 
         fun <T : Any, VH : RecyclerView.ViewHolder> register(
-            dataType: KClass<in T>,
-            viewHolderBinder: ViewHolderBinder<T, VH>
+                dataType: KClass<in T>,
+                viewHolderBinder: ViewHolderBinder<T, VH>
         ): Builder {
             return register(dataType.java, viewHolderBinder)
         }
 
         fun <T, VH : RecyclerView.ViewHolder> register(
-            dataType: Class<in T>,
-            viewHolderBinder: ViewHolderBinder<T, VH>
+                dataType: Class<in T>,
+                viewHolderBinder: ViewHolderBinder<T, VH>
         ): Builder {
             itemList.add(Item(dataType, viewHolderBinder))
             return this
@@ -27,18 +27,18 @@ object Various {
 
         @JvmOverloads
         fun <T : Any, VH : RecyclerView.ViewHolder> register(
-            dataType: KClass<in T>,
-            onCreateViewHolderCallback: OnCreateViewHolderCallback<VH>,
-            onBindViewHolderCallback: OnBindViewHolderCallback<T, VH> = { _, _, _ -> }
+                dataType: KClass<in T>,
+                onCreateViewHolderCallback: OnCreateViewHolderCallback<VH>,
+                onBindViewHolderCallback: OnBindViewHolderCallback<T, VH> = { _, _, _ -> }
         ): Builder {
             return register(dataType.java, onCreateViewHolderCallback, onBindViewHolderCallback)
         }
 
         @JvmOverloads
         fun <T, VH : RecyclerView.ViewHolder> register(
-            dataType: Class<in T>,
-            onCreateViewHolderCallback: OnCreateViewHolderCallback<VH>,
-            onBindViewHolderCallback: OnBindViewHolderCallback<T, VH> = { _, _, _ -> }
+                dataType: Class<in T>,
+                onCreateViewHolderCallback: OnCreateViewHolderCallback<VH>,
+                onBindViewHolderCallback: OnBindViewHolderCallback<T, VH> = { _, _, _ -> }
         ): Builder {
             val binder = LambdaViewHolderBinder(onCreateViewHolderCallback, onBindViewHolderCallback)
             val item = Item(dataType, binder)
@@ -53,9 +53,9 @@ object Various {
     }
 
     class Adapter internal constructor(private val itemMatcher: ItemMatcher) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        public var dataList: List<Any> = emptyList()
+        var dataList: List<Any> = emptyList()
 
         override fun getItemCount(): Int = dataList.size
 
