@@ -8,15 +8,15 @@ ext {
 }
 
 ext {
-    buildToolsVersion = "27.0.3"
     compileSdkVersion = 27
+    buildToolsVersion = "27.0.3"
     minSdkVersion = 14
     targetSdkVersion = 27
 }
 
-def agp_version = "3.1.1"
-def kotlin_version = "1.2.40"
-def support_version = "27.0.2"
+def agp_version = "3.1.2"
+def kotlin_version = "1.2.41"
+def support_version = "27.1.1"
 
 ext.plugin = [
         "android"      : "com.android.tools.build:gradle:${agp_version}",
