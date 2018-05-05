@@ -12,7 +12,7 @@ class LambdaViewHolderBinder<in T, VH : RecyclerView.ViewHolder> internal constr
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): VH =
         onCreateViewHolderCallback(inflater, parent)
 
-    override fun onBindViewHolder(holder: VH, data: T, payloads: List<Any>?) =
+    override fun onBindViewHolder(holder: VH, data: T, payloads: List<Any>) =
         onBindViewHolderCallback(holder, data, payloads)
 }
 

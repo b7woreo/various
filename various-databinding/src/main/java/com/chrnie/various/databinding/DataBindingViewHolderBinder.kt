@@ -16,7 +16,7 @@ class DataBindingViewHolderBinder<in T>(private val layoutId: Int, private val v
         return DataBindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DataBindingViewHolder, data: T, payloads: List<Any>?) {
+    override fun onBindViewHolder(holder: DataBindingViewHolder, data: T, payloads: List<Any>) {
         holder.binding.setVariable(variableId, data)
     }
 

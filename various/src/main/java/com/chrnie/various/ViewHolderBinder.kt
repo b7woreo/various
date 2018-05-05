@@ -12,7 +12,7 @@ abstract class ViewHolderBinder<in T, VH : RecyclerView.ViewHolder> {
 
     abstract fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): VH
 
-    abstract fun onBindViewHolder(holder: VH, data: T, payloads: List<Any>?)
+    abstract fun onBindViewHolder(holder: VH, data: T, payloads: List<Any>)
 
     open fun onViewAttachedToWindow(holder: VH) {}
 

@@ -80,10 +80,10 @@ object Various {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val data = dataList[position]
             val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
-            binder.onBindViewHolder(holder, data, null)
+            binder.onBindViewHolder(holder, data, emptyList())
         }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: List<Any>?) {
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: List<Any>) {
             val data = dataList[position]
             val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
             binder.onBindViewHolder(holder, data, payloads)
