@@ -5,7 +5,62 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlin.reflect.KClass
 
-object Various {
+class Various<DATA : Any> internal constructor(private val itemMatcher: ItemMatcher) :
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    var dataList: List<DATA> = emptyList()
+
+    override fun getItemCount(): Int = dataList.size
+
+    override fun getItemViewType(position: Int): Int {
+        val data = dataList[position]
+        return itemMatcher.requestViewType(data)
+    }
+
+    override fun getItemId(position: Int): Long {
+        val viewType = getItemViewType(position)
+        val binder = itemMatcher.requestViewHolderBinder(viewType)
+        val data = dataList[position]
+        val id = binder.getItemId(data)
+        return viewType.toLong() shl 32 or id.toLong()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val binder = itemMatcher.requestViewHolderBinder(viewType)
+        return binder.onCreateViewHolder(LayoutInflater.from(parent.context), parent)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val data = dataList[position]
+        val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
+        binder.onBindViewHolder(holder, data, emptyList())
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: List<Any>) {
+        val data = dataList[position]
+        val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
+        binder.onBindViewHolder(holder, data, payloads)
+    }
+
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
+        binder.onViewAttachedToWindow(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
+        binder.onViewDetachedFromWindow(holder)
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
+        binder.onViewRecycled(holder)
+    }
+
+    override fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
+        val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
+        return binder.onFailedToRecycleView(holder)
+    }
 
     class Builder<DATA : Any> @JvmOverloads constructor(private val itemMatcherFactory: ItemMatcher.Factory = DefaultItemMatcherFactory) {
         private val itemList = ArrayList<Item<*, *>>()
@@ -46,67 +101,9 @@ object Various {
             return this
         }
 
-        fun build(): Various.Adapter<DATA> {
+        fun build(): Various<DATA> {
             val itemMatcher = itemMatcherFactory.create(ArrayList(itemList))
-            return Adapter(itemMatcher)
-        }
-    }
-
-    class Adapter<DATA : Any> internal constructor(private val itemMatcher: ItemMatcher) :
-            RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-        var dataList: List<DATA> = emptyList()
-
-        override fun getItemCount(): Int = dataList.size
-
-        override fun getItemViewType(position: Int): Int {
-            val data = dataList[position]
-            return itemMatcher.requestViewType(data)
-        }
-
-        override fun getItemId(position: Int): Long {
-            val viewType = getItemViewType(position)
-            val binder = itemMatcher.requestViewHolderBinder(viewType)
-            val data = dataList[position]
-            val id = binder.getItemId(data)
-            return viewType.toLong() shl 32 or id.toLong()
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            val binder = itemMatcher.requestViewHolderBinder(viewType)
-            return binder.onCreateViewHolder(LayoutInflater.from(parent.context), parent)
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val data = dataList[position]
-            val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
-            binder.onBindViewHolder(holder, data, emptyList())
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: List<Any>) {
-            val data = dataList[position]
-            val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
-            binder.onBindViewHolder(holder, data, payloads)
-        }
-
-        override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
-            val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
-            binder.onViewAttachedToWindow(holder)
-        }
-
-        override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
-            val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
-            binder.onViewDetachedFromWindow(holder)
-        }
-
-        override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-            val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
-            binder.onViewRecycled(holder)
-        }
-
-        override fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
-            val binder = itemMatcher.requestViewHolderBinder(holder.itemViewType)
-            return binder.onFailedToRecycleView(holder)
+            return Various(itemMatcher)
         }
     }
 }
