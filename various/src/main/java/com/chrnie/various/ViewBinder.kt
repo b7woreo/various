@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
-abstract class ViewHolderBinder<in T, VH : RecyclerView.ViewHolder> {
+abstract class ViewBinder<in T, VH : RecyclerView.ViewHolder> {
 
     open fun getItemId(data: T): Int {
         return RecyclerView.NO_ID.toInt()

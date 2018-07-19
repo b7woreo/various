@@ -5,10 +5,10 @@ import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.chrnie.various.ViewHolderBinder
+import com.chrnie.various.ViewBinder
 
-class DataBindingViewHolderBinder<in T>(private val layoutId: Int, private val variableId: Int)
-    : ViewHolderBinder<T, DataBindingViewHolderBinder.DataBindingViewHolder>() {
+class DataBindingViewBinder<in T>(private val layoutId: Int, private val variableId: Int)
+    : ViewBinder<T, DataBindingViewBinder.DataBindingViewHolder>() {
 
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): DataBindingViewHolder {
