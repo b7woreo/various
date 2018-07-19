@@ -67,16 +67,16 @@ class Various<DATA : Any> internal constructor(private val itemMatcher: ItemMatc
 
         fun <T : DATA, VH : RecyclerView.ViewHolder> register(
                 dataType: KClass<in T>,
-                viewHolderBinder: ViewHolderBinder<T, VH>
+                viewBinder: ViewBinder<T, VH>
         ): Builder<DATA> {
-            return register(dataType.java, viewHolderBinder)
+            return register(dataType.java, viewBinder)
         }
 
         fun <T : DATA, VH : RecyclerView.ViewHolder> register(
                 dataType: Class<in T>,
-                viewHolderBinder: ViewHolderBinder<T, VH>
+                viewBinder: ViewBinder<T, VH>
         ): Builder<DATA> {
-            itemList.add(Item(dataType, viewHolderBinder))
+            itemList.add(Item(dataType, viewBinder))
             return this
         }
 
@@ -95,7 +95,7 @@ class Various<DATA : Any> internal constructor(private val itemMatcher: ItemMatc
                 onCreateViewHolderCallback: OnCreateViewHolderCallback<VH>,
                 onBindViewHolderCallback: OnBindViewHolderCallback<T, VH> = { _, _, _ -> }
         ): Builder<DATA> {
-            val binder = LambdaViewHolderBinder(onCreateViewHolderCallback, onBindViewHolderCallback)
+            val binder = LambdaViewBinder(onCreateViewHolderCallback, onBindViewHolderCallback)
             val item = Item(dataType, binder)
             itemList.add(item)
             return this
