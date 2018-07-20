@@ -1,10 +1,11 @@
-def major = 0
-def minor = 4
-def patch = 2
+def major = 1
+def minor = 0
+def patch = 0
+boolean release = false
 
 ext {
     versionCode = major * 1000000 + minor * 10000 + patch
-    versionName = "${major}.${minor}.${patch}"
+    versionName = "${major}.${minor}.${patch}${release?"":"-SNAPSHOT"}"
 }
 
 ext {
@@ -27,10 +28,10 @@ ext.plugin = [
 ext.lib = [
         "kotlin-stdlib": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}",
         "recyclerview" : "com.android.support:recyclerview-v7:${support_version}",
-        "support-core"             : "com.android.support:support-core-utils:${support_version}",
+        "support-core" : "com.android.support:support-core-utils:${support_version}",
         "test-runner"  : "com.android.support.test:runner:0.5"
 ]
 
-ext.compiler=[
-        "databinding":"com.android.databinding:compiler:${agp_version}"
+ext.compiler = [
+        "databinding": "com.android.databinding:compiler:${agp_version}"
 ]

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -18,7 +19,7 @@ android {
         it.generateBuildConfig.enabled = false
     }
 
-    dataBinding{
+    dataBinding {
         enabled = true
     }
 }
@@ -29,4 +30,7 @@ dependencies {
     implementation lib["kotlin-stdlib"]
     implementation lib["recyclerview"]
     implementation lib["support-core"]
+    kapt compiler["databinding"]
 }
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

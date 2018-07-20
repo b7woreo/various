@@ -24,3 +24,5 @@ dependencies {
     implementation lib["kotlin-stdlib"]
     implementation lib["recyclerview"]
 }
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
