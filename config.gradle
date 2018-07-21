@@ -22,14 +22,11 @@ def support_version = "27.1.1"
 ext.plugin = [
         "android"      : "com.android.tools.build:gradle:${agp_version}",
         "kotlin"       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}",
-        "android-maven": "com.github.dcendents:android-maven-gradle-plugin:1.5",
 ]
 
 ext.lib = [
         "kotlin-stdlib": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}",
         "recyclerview" : "com.android.support:recyclerview-v7:${support_version}",
-        "support-core" : "com.android.support:support-core-utils:${support_version}",
-        "test-runner"  : "com.android.support.test:runner:0.5"
 ]
 
 ext.compiler = [

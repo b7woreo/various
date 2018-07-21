@@ -9,7 +9,6 @@ buildscript {
     dependencies {
         classpath rootProject.plugin["android"]
         classpath rootProject.plugin["kotlin"]
-        classpath rootProject.plugin["android-maven"]
     }
 }
 
