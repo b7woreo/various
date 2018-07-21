@@ -9,20 +9,20 @@ object DefaultItemMatcherFactory : ItemMatcher.Factory {
     private val dataTypeToIndex = ArrayMap<Class<*>, Int>()
 
     override fun create(itemList: List<Item<*, *>>): ItemMatcher {
-        val indexToItem = SparseArray<ViewBinder<Any, RecyclerView.ViewHolder>>(itemList.size)
+        val indexToBinder = SparseArray<ViewBinder<Any, RecyclerView.ViewHolder>>(itemList.size)
         itemList.forEach { (dataType, viewBinder) ->
 
             val index = (dataTypeToIndex[dataType]
-                    ?: (dataTypeToIndex.size + 1).apply { dataTypeToIndex[dataType] = this })
+                    ?: (dataTypeToIndex.size + 1).also { dataTypeToIndex[dataType] = it })
 
-            indexToItem.put(index, viewBinder as ViewBinder<Any, RecyclerView.ViewHolder>)
+            indexToBinder.put(index, viewBinder as ViewBinder<Any, RecyclerView.ViewHolder>)
         }
 
-        return DefaultItemMatcher(indexToItem)
+        return DefaultItemMatcher(indexToBinder)
     }
 
     private class DefaultItemMatcher(
-            private val indexToItem: SparseArray<ViewBinder<Any, RecyclerView.ViewHolder>>
+        private val indexToBinder: SparseArray<ViewBinder<Any, RecyclerView.ViewHolder>>
     ) : ItemMatcher {
 
         override fun requestViewType(date: Any): Int {
@@ -32,7 +32,7 @@ object DefaultItemMatcherFactory : ItemMatcher.Factory {
         }
 
         override fun requestViewHolderBinder(viewType: Int): ViewBinder<Any, RecyclerView.ViewHolder> {
-            return indexToItem[viewType]
+            return indexToBinder[viewType]
         }
     }
 }
