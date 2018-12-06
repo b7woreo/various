@@ -1,6 +1,6 @@
 package com.chrnie.various
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 
 interface ItemMatcher {
 
