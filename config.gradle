@@ -1,7 +1,7 @@
-def major = 1
+def major = 2
 def minor = 0
 def patch = 0
-boolean release = true
+boolean release = false
 
 ext {
     versionCode = major * 1000000 + minor * 10000 + patch
