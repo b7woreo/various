@@ -1,8 +1,8 @@
 package com.chrnie.various
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 abstract class ViewBinder<in T, VH : RecyclerView.ViewHolder> {
 

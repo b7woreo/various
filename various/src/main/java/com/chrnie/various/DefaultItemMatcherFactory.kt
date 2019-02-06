@@ -1,8 +1,8 @@
 package com.chrnie.various
 
-import android.support.v4.util.ArrayMap
-import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
+import androidx.collection.ArrayMap
+import androidx.recyclerview.widget.RecyclerView
 
 object DefaultItemMatcherFactory : ItemMatcher.Factory {
 

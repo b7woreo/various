@@ -1,8 +1,8 @@
 package com.chrnie.various
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import kotlin.reflect.KClass
 
 class Various<DATA : Any> internal constructor(private val itemMatcher: ItemMatcher) :
