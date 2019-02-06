@@ -4,7 +4,7 @@ import android.util.SparseArray
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class GenericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class UniversalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val viewIdCache = SparseArray<View>()
 
