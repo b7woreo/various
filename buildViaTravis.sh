@@ -3,7 +3,7 @@
 
 set -e
 
-if ["$TRAVIS_BRANCH" == 'master' && "$TRAVIS_TAG" != ""]; then
+if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_TAG" != "" ]; then
   echo "Build for Release => Branch ["$TRAVIS_BRANCH"]  Tag ["$TRAVIS_TAG"]"
   ./gradlew -PbintrayUser="$BINTRAY_USER" -PbintrayKey="$BINTRAY_KEY" clean uploadArchives
 else
