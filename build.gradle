@@ -7,8 +7,10 @@ buildscript {
     }
 
     dependencies {
-        classpath rootProject.plugin["android"]
-        classpath rootProject.plugin["kotlin"]
+        classpath plugin["android"]
+        classpath plugin["kotlin"]
+        classpath plugin["android-maven"]
+        classpath plugin["bintray"]
     }
 }
 
@@ -21,4 +23,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+def getPropertyOrNull(String prop) {
+    return hasProperty(prop) ? getProperty(prop) : null
 }

@@ -1,11 +1,17 @@
-def major = 2
-def minor = 0
-def patch = 0
-boolean release = false
+rootProject.version = '2.0.0-SNAPSHOT'
+rootProject.group = 'com.chrnie'
 
 ext {
-    versionCode = major * 1000000 + minor * 10000 + patch
-    versionName = "${major}.${minor}.${patch}${release?"":"-SNAPSHOT"}"
+    projectDescription = 'Universal Android RecyclerView#Adapter.'
+    projectUrl = 'https://github.com/cheie/various'
+
+    scmUrl = 'https://github.com/cheie/various'
+    scmConnection = 'scm:git@github.com:cheie/various.git'
+    scmDevConnection = 'scm:git@github.com:cheie/various.git'
+
+    licenseName = 'The MIT License'
+    licenseUrl = 'https://opensource.org/licenses/mit-license'
+    licenseDist = 'repo'
 }
 
 ext {
@@ -21,6 +27,8 @@ def kotlin_version = "1.3.10"
 ext.plugin = [
         "android"      : "com.android.tools.build:gradle:${agp_version}",
         "kotlin"       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}",
+        "android-maven": "com.github.dcendents:android-maven-gradle-plugin:2.1",
+        "bintray"      : "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4",
 ]
 
 ext.lib = [

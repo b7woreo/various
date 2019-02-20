@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -8,8 +10,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode rootProject.versionCode
-        versionName rootProject.versionName
     }
 
     // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
@@ -23,4 +23,51 @@ dependencies {
     implementation lib["recyclerview"]
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+install {
+    repositories.mavenInstaller {
+        pom {
+            groupId = rootProject.group
+            artifactId = 'various'
+            version = rootProject.version
+
+            project {
+                name 'Various'
+                description rootProject.projectDescription
+                url rootProject.projectUrl
+
+                scm {
+                    url rootProject.scmUrl
+                    connection rootProject.scmConnection
+                    developerConnection rootProject.scmDevConnection
+                }
+
+                licenses {
+                    license {
+                        name rootProject.licenseName
+                        url rootProject.licenseUrl
+                        distribution rootProject.licenseDist
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'chrnie'
+                        name 'ChenRenJie'
+                    }
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = getPropertyOrNull('bintrayUser')
+    key = getPropertyOrNull('bintrayKey')
+
+    pkg {
+        repo = 'Various'
+        name = 'Various'
+        licenses = [rootProject.licenseName]
+        vcsUrl = rootProject.scmUrl
+    }
+}
