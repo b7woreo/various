@@ -1,0 +1,31 @@
+language: android
+
+android:
+  components:
+  - tools
+  - platform-tools
+
+jdk:
+- oraclejdk8
+
+# as per http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
+sudo: false
+
+before_install:
+# Install SDK license so Android Gradle plugin can install deps.
+- mkdir "$ANDROID_HOME/licenses" || true
+- echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_HOME/licenses/android-sdk-license"
+
+# script for build and release via Travis to Bintray
+script: ./buildViaTravis.sh
+
+# cache between builds
+cache:
+  directories:
+  - $HOME/.gradle
+
+# credential for release
+env:
+  global:
+  - secure: "wrDrmQA6oVXFCKkgTseOaZEe0mlzWQQ+Z1gaLljLP7mAV7mPch9Y6ziJO88yJ09TX13e23TW22lJByVYdnYlyuDGmsbnRTOA0ueS9xv7PL39rxt38wMld+pFATNIRrd0TaV/UImRfp90HI7Uax3YuzGCbAD43lE6ax7eQeLp34OfzQjKGj9WCwKnVqOdg1JRz0nsk5N4nOfpof2E0jSlMhBkNGHquN2ZlSqRC6SPLrgTf9OhoR96TB7yBWjxzJtO1GRtdKcSgAb2chqHqWJyfyMrL7xust4tDnfH+vP/gNFzt0N1jGa668QyrOfW/TlmGK1A3pOw04azMCFKp7Cvnxq4jaE+Wz6R9+W1RfXjZm2e9mRDj+Nt4fzGaCXvcTqrghrhTs0dUWFPdfi1IYDt8lf7TV9952JlRrdHV6p0rCIbVqFjo29ibqYtZbnyxG1ItDElsZNtmOLU96heMerTyt6q6vfSZqZAF3yW7i2YM0RuZZthp7QgnUw+4je59c/+TLzlrUv3lF4zLsyRXUB5WUXzoEJRpShrv+H21aGBlcaubcD67CkM8G1KcUWaUu7P5VRl6P/0SYi/WrSdmQaQtbwGA5DDqBKBd1YXLlT+kAayA6Tuq7NUoNaYE3R1n3jYA4pIxks7D1Rc+phsYGqGs6SXO08VO7HeE0VZqSwzLaU="
+  - secure: "uyzPIcNOt8dYBu2Ac2UNqCR7SROFKS/01jjq/+6KuUyVLy9zjCGgb65FqCxsuivP3h085L/ZBj5dRFj3UC3n5FvHOfh0s3B5fjG/t+sPZwhOtPGE+pahd3opiDdGmyUdSMh6o+R1vGA3qO+Lp+++eWI+SRPC/MY9O+bmzgZgfVDuT8R6R4xGxwQ8cTFKA8w5cpz7prraVky/+Ju6yNnLOeZI1Nbme/SU+lbuOis9ksC/kTIC1wTFkEPZW3XdJr7zLEqDcV1h7I08LkbpWvLshUM9MBdBIcPvh9Sr53eeJcQqiSC/Kuj92o47WUwGn43ysUNTy01YdpjI6IR87z/BHp6E7+qjW7C/GtPHyi2dKJqMBX4UxYApCJ3ZN7TAYdUzKlTr1c+WKMScd4IgZAWf7ewCWsIc26EJkqP0ZTCCPCINRePHfTUNHGpIRw6eCRzLdtGweKRynpRuY6LuNSY09dUUEGXhmUJEO+KETjBd/I46ttSIJTDzH60Q2GnlI8BSv0Yb/Afa1/dopNdGmk7dMKbH46Pj0WrPrUJ36jHZoZ5a0UG9hHBgO14l1eTugwD5U0mJdjmGPnF//nf3O8LawxU0pdUJlhrwYlrTHdeEacvMdScCyir3Ol5HZhqCYdMscTe3Y4oWjQCGPYT7vyk3CYTzqFGL37sANeEH84JtWb4="
