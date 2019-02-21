@@ -38,7 +38,7 @@ install {
             version = rootProject.version
 
             project {
-                name 'Various Databinding'
+                name 'various-databinding'
                 description rootProject.projectDescription
                 url rootProject.projectUrl
 
@@ -72,8 +72,8 @@ bintray {
     key = getPropertyOrNull('bintrayKey')
 
     pkg {
-        repo = 'Various'
-        name = 'Various DataBinding'
+        repo = 'various'
+        name = 'various-databinding'
         licenses = [rootProject.licenseName]
         vcsUrl = rootProject.scmUrl
     }

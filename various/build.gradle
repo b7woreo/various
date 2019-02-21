@@ -31,7 +31,7 @@ install {
             version = rootProject.version
 
             project {
-                name 'Various'
+                name 'various'
                 description rootProject.projectDescription
                 url rootProject.projectUrl
 
@@ -65,8 +65,8 @@ bintray {
     key = getPropertyOrNull('bintrayKey')
 
     pkg {
-        repo = 'Various'
-        name = 'Various'
+        repo = 'various'
+        name = 'various'
         licenses = [rootProject.licenseName]
         vcsUrl = rootProject.scmUrl
     }
