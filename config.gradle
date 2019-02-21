@@ -1,17 +1,6 @@
-rootProject.version = '2.0.0-SNAPSHOT'
-rootProject.group = 'com.chrnie'
-
-ext {
-    projectDescription = 'Universal Android RecyclerView#Adapter.'
-    projectUrl = 'https://github.com/cheie/various'
-
-    scmUrl = 'https://github.com/cheie/various'
-    scmConnection = 'scm:git@github.com:cheie/various.git'
-    scmDevConnection = 'scm:git@github.com:cheie/various.git'
-
-    licenseName = 'The MIT License'
-    licenseUrl = 'https://opensource.org/licenses/mit-license'
-    licenseDist = 'repo'
+subprojects {
+    version = '2.0.0-SNAPSHOT'
+    group = 'com.chrnie'
 }
 
 ext {

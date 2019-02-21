@@ -1,0 +1,45 @@
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                name project.name
+                description 'Universal Android RecyclerView#Adapter.'
+                url 'https://github.com/cheie/various'
+
+                scm {
+                    url 'https://github.com/cheie/various'
+                    connection 'scm:git:https://github.com:cheie/various.git'
+                    developerConnection 'scm:git:git@github.com:cheie/various.git'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT'
+                        url 'https://opensource.org/licenses/mit-license'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'chrnie'
+                        name 'ChenRenJie'
+                    }
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = getPropertyOrNull('bintrayUser')
+    key = getPropertyOrNull('bintrayKey')
+    configurations = ['archives']
+
+    pkg {
+        repo = 'various'
+        name = project.name
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/cheie/various.git'
+    }
+}
